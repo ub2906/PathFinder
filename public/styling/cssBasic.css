@@ -264,7 +264,7 @@
 @keyframes visitedStartNodeBlueAnimation {
   0% {
     transform: scale(.3);
-    background-color: rgba(0, 0, 66, 0.75);
+    background-color: rgba(236, 236, 241, 0.75);
     border-radius: 100%;
   }
 
@@ -302,7 +302,7 @@
 
 #actualStartButton {
   /*color: red;*/
-  background-color: none;
+  background-color:none;
 }
 
 #mainGrid{
@@ -354,6 +354,11 @@
   padding-top: 5px;
 }
 
+#algoImage{
+  width: 10%;
+  height: 10%;
+}
+
 #secondTutorialImage {
   padding-top: 5px;
 }
@@ -383,6 +388,7 @@
 
 #board{
   border-collapse:collapse;
+  background-color: #ffffff
   /*position: center*/
 }
 
@@ -413,6 +419,10 @@
   /*border: 1px solid rgb(175, 216, 248);*/
   width: 25px;
   height: 25px;
+  background-color: #ca5f18;
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; 
 }
 
 #startButtonStart {
@@ -500,17 +510,17 @@
 @keyframes wallAnimation {
   0% {
     transform: scale(.3);
-    background-color: rgb(235, 75, 12);
+    background-color: rgb(236, 180, 57);
   }
 
   50% {
     transform: scale(1.2);
-    background-color: rgb(235, 75, 12);
+    background-color: rgb(235, 131, 12);
   }
 
   100% {
     transform: scale(1.0);
-    background-color: rgb(235, 75, 12);
+    background-color: rgb(255, 95, 2);
   }
 }
 
@@ -641,7 +651,7 @@
 
 .current{
   border: 1px solid rgb(175, 216, 248);
-  background-color: rgb(255, 254, 106)
+  background-color: rgb(255, 255, 255)
 }
 
 .object{
@@ -5645,7 +5655,7 @@ fieldset[disabled] .navbar-inverse .navbar-btn.active {
   border-color: #1abc9c;
 }
 .navbar-inverse .navbar-btn .badge {
-  color: #1abc9c;
+  color: #1bd3a5;
   background-color: #ffffff;
 }
 @media (min-width: 768px) {
