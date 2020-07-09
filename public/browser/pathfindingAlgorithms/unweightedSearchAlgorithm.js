@@ -1,3 +1,4 @@
+const getNeighbors = require("./getNeighbors");
 function unweightedSearchAlgorithm(nodes, start, target, nodesToAnimate, boardArray, name) {
   if (!start || !target || start === target) {
     return false;
@@ -23,54 +24,4 @@ function unweightedSearchAlgorithm(nodes, start, target, nodesToAnimate, boardAr
   }
   return false;
 }
-
-function getNeighbors(id, nodes, boardArray, name) {
-  let coordinates = id.split("-");
-  let x = parseInt(coordinates[0]);
-  let y = parseInt(coordinates[1]);
-  let neighbors = [];
-  let potentialNeighbor;
-  if (boardArray[x - 1] && boardArray[x - 1][y]) {
-    potentialNeighbor = `${(x - 1).toString()}-${y.toString()}`
-    if (nodes[potentialNeighbor].status !== "wall") {
-      if (name === "bfs") {
-        neighbors.push(potentialNeighbor);
-      } else {
-        neighbors.unshift(potentialNeighbor);
-      }
-    }
-  }
-  if (boardArray[x][y + 1]) {
-    potentialNeighbor = `${x.toString()}-${(y + 1).toString()}`
-    if (nodes[potentialNeighbor].status !== "wall") {
-      if (name === "bfs") {
-        neighbors.push(potentialNeighbor);
-      } else {
-        neighbors.unshift(potentialNeighbor);
-      }
-    }
-  }
-  if (boardArray[x + 1] && boardArray[x + 1][y]) {
-    potentialNeighbor = `${(x + 1).toString()}-${y.toString()}`
-    if (nodes[potentialNeighbor].status !== "wall") {
-      if (name === "bfs") {
-        neighbors.push(potentialNeighbor);
-      } else {
-        neighbors.unshift(potentialNeighbor);
-      }
-    }
-  }
-  if (boardArray[x][y - 1]) {
-    potentialNeighbor = `${x.toString()}-${(y - 1).toString()}`
-    if (nodes[potentialNeighbor].status !== "wall") {
-      if (name === "bfs") {
-        neighbors.push(potentialNeighbor);
-      } else {
-        neighbors.unshift(potentialNeighbor);
-      }
-    }
-  }
-  return neighbors;
-}
-
 module.exports = unweightedSearchAlgorithm;
