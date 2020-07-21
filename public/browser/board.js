@@ -5,8 +5,8 @@ const mazeGenerationAnimations = require("./animations/mazeGenerationAnimations"
 const weightedSearchAlgorithm = require("./pathfindingAlgorithms/weightedSearchAlgorithm");
 const unweightedSearchAlgorithm = require("./pathfindingAlgorithms/unweightedSearchAlgorithm");
 const recursiveDivisionMaze = require("./mazeAlgorithms/recursiveDivisionMaze");
-const otherMaze = require("./mazeAlgorithms/otherMaze");
-const otherOtherMaze = require("./mazeAlgorithms/otherOtherMaze");
+const VerticalMaze = require("./mazeAlgorithms/VerticalMaze");
+const HorizontalMaze = require("./mazeAlgorithms/HorizontalMaze");
 const astar = require("./pathfindingAlgorithms/astar");
 const stairDemonstration = require("./mazeAlgorithms/stairDemonstration");
 const weightsDemonstration = require("./mazeAlgorithms/weightsDemonstration");
@@ -19,6 +19,7 @@ function Board(height, width) {
   this.width = width;
   this.start = null;
   this.target = null;
+  this.end=null;
   this.object = null;
   this.boardArray = [];
   this.nodes = {};
@@ -37,7 +38,9 @@ function Board(height, width) {
   this.currentAlgorithm = null;
   this.currentHeuristic = null;
   this.numberOfObjects = 0;
+  this.numberOfEnds=0;
   this.isObject = false;
+  this.isEnd = false;
   this.buttonsOn = false;
   this.speed = "fast";
 }
@@ -87,7 +90,7 @@ Board.prototype.addEventListeners = function() {
         e.preventDefault();
         if (this.buttonsOn) {
           board.mouseDown = true;
-          if (currentNode.status === "start" || currentNode.status === "target" || currentNode.status === "object") {
+          if (currentNode.status === "start" || currentNode.status === "target" || currentNode.status === "object" || currentNode.status === "end") {
             board.pressedNodeStatus = currentNode.status;
           } else {
             board.pressedNodeStatus = "normal";
@@ -104,6 +107,8 @@ Board.prototype.addEventListeners = function() {
             board.start = currentId;
           } else if (board.pressedNodeStatus === "object") {
             board.object = currentId;
+          } else if(board.pressedNodeStatus === "end"){
+            board.end = currentId;
           }
           board.pressedNodeStatus = "normal";
         }
@@ -112,6 +117,12 @@ Board.prototype.addEventListeners = function() {
         if (this.buttonsOn) {
           if (board.mouseDown && board.pressedNodeStatus !== "normal") {
             board.changeSpecialNode(currentNode);
+            if(board.pressedNodeStatus === "end"){
+              board.end = currentId;
+              if(board.algoDone) {
+                board.redoAlgorithm();
+              }
+            }
             if (board.pressedNodeStatus === "target") {
               board.target = currentId;
               if (board.algoDone) {
@@ -154,7 +165,7 @@ Board.prototype.getNode = function(id) {
 Board.prototype.changeSpecialNode = function(currentNode) {
   let element = document.getElementById(currentNode.id), previousElement;
   if (this.previouslySwitchedNode) previousElement = document.getElementById(this.previouslySwitchedNode.id);
-  if (currentNode.status !== "target" && currentNode.status !== "start" && currentNode.status !== "object") {
+  if (currentNode.status !== "target" && currentNode.status !== "start" && currentNode.status !== "object" && currentNode.status !== "end") {
     if (this.previouslySwitchedNode) {
       this.previouslySwitchedNode.status = this.previouslyPressedNodeStatus;
       previousElement.className = this.previouslySwitchedNodeWeight === 15 ?
@@ -182,7 +193,7 @@ Board.prototype.changeSpecialNode = function(currentNode) {
 
 Board.prototype.changeNormalNode = function(currentNode) {
   let element = document.getElementById(currentNode.id);
-  let relevantStatuses = ["start", "target", "object"];
+  let relevantStatuses = ["start", "target", "object","end"];
   let unweightedAlgorithms = ["dfs", "bfs"]
   if (!this.keyDown) {
     if (!relevantStatuses.includes(currentNode.status)) {
@@ -203,7 +214,7 @@ Board.prototype.changeNormalNode = function(currentNode) {
   }
 };
 
-Board.prototype.drawShortestPath = function(targetNodeId, startNodeId, object) {
+Board.prototype.drawShortestPath = function(targetNodeId, startNodeId, object, end) {
   let currentNode;
   if (this.currentAlgorithm !== "bidirectional") {
     currentNode = this.nodes[this.nodes[targetNodeId].previousNode];
@@ -216,6 +227,13 @@ Board.prototype.drawShortestPath = function(targetNodeId, startNodeId, object) {
       while (currentNode.id !== startNodeId) {
         this.shortestPathNodesToAnimate.unshift(currentNode);
         document.getElementById(currentNode.id).className = `shortest-path`;
+        currentNode = this.nodes[currentNode.previousNode];
+      }
+    }
+    if(end){
+      currentNode = this.nodes[this.nodes[endNodeId].previousNode];
+      while (currentNode.id !== targetNodeId) {
+        this.objectShortestPathNodesToAnimate.unshift(currentNode);
         currentNode = this.nodes[currentNode.previousNode];
       }
     }
@@ -683,6 +701,8 @@ Board.prototype.changeStartNodeImages = function() {
   } else {
     document.getElementById("bombLegend").className = "";
     document.getElementById("startButtonAddObject").className = "navbar-inverse navbar-nav";
+    document.getElementById("endLegend").className = "";
+    document.getElementById("startButtonAddEnd").className = "navbar-inverse navbar-nav";
   }
   if (guaranteed.includes(this.currentAlgorithm)) {
     document.getElementById("algorithmDescriptor").innerHTML = `${name} is <i><b>weighted</b></i> and <i><b>guarantees</b></i> the shortest path!`;
@@ -800,7 +820,7 @@ Board.prototype.toggleButtons = function() {
         }
       }
     }
-
+    
     document.getElementById("adjustFast").onclick = () => {
       this.speed = "fast";
       document.getElementById("adjustSpeed").innerHTML = 'Speed: Fast<span class="caret"></span>';
@@ -838,6 +858,7 @@ Board.prototype.toggleButtons = function() {
         this.nodes[objectNodeId].status = "unvisited";
         this.isObject = false;
       }
+
       this.clearPath("clickedButton");
       this.changeStartNodeImages();
     }
@@ -911,7 +932,7 @@ Board.prototype.toggleButtons = function() {
 
     document.getElementById("startButtonClearBoard").onclick = () => {
       document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Bomb</a></li>';
-
+      document.getElementById("startButtonAddEnd").innerHTML='<a href"#">Add End</a></li>';
 
 
       let navbarHeight = document.getElementById("navbarDiv").clientHeight;
@@ -948,6 +969,7 @@ Board.prototype.toggleButtons = function() {
         });
       this.start = start;
       this.target = target;
+      this.end=null;
       this.object = null;
       this.nodesToAnimate = [];
       this.objectNodesToAnimate = [];
@@ -977,7 +999,7 @@ Board.prototype.toggleButtons = function() {
       this.clearWalls();
       this.clearPath("clickedButton");
       this.toggleButtons();
-      otherMaze(this, 2, this.height - 3, 2, this.width - 3, "vertical", false);
+      VerticalMaze(this, 2, this.height - 3, 2, this.width - 3, "vertical", false);
       mazeGenerationAnimations(this);
     }
 
@@ -985,7 +1007,7 @@ Board.prototype.toggleButtons = function() {
       this.clearWalls();
       this.clearPath("clickedButton");
       this.toggleButtons();
-      otherOtherMaze(this, 2, this.height - 3, 2, this.width - 3, "horizontal", false);
+      HorizontalMaze(this, 2, this.height - 3, 2, this.width - 3, "horizontal", false);
       mazeGenerationAnimations(this);
     }
 
@@ -1019,12 +1041,42 @@ Board.prototype.toggleButtons = function() {
       }
 
     }
+    document.getElementById("startButtonAddEnd").onclick = () => {
+      let innerHTML = document.getElementById("startButtonAddEnd").innerHTML;
+      if (this.currentAlgorithm !== "bidirectional") {
+        if (innerHTML.includes("Add")) {
+          let r = Math.floor(this.height / 4);
+          let c = Math.floor(2 * this.width/4);
+          let endNodeId = `${r}-${c}`;
+          if (this.target === endNodeId || this.start === endNodeId || this.numberOfEnds === 1) {
+            console.log("Failure to place object.");
+          } else {
+            document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Remove End</a></li>';
+            this.clearPath("clickedButton");
+            this.end = endNodeId;
+            this.numberOfEnds = 1;
+            this.nodes[endNodeId].status = "end";
+            document.getElementById(endNodeId).className = "end";
+          }
+        } else {
+          let endNodeId = this.end;
+          document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add End</a></li>';
+          document.getElementById(endNodeId).className = "unvisited";
+          this.end = null;
+          this.numberOfEnds = 0;
+          this.nodes[endNodeId].status = "unvisited";
+          this.isENd= false;
+          this.clearPath("clickedButton");
+        }
+      }
+    }
 
     document.getElementById("startButtonClearPath").className = "navbar-inverse navbar-nav";
     document.getElementById("startButtonClearWalls").className = "navbar-inverse navbar-nav";
     document.getElementById("startButtonClearBoard").className = "navbar-inverse navbar-nav";
     if (this.currentAlgorithm !== "bidirectional") {
       document.getElementById("startButtonAddObject").className = "navbar-inverse navbar-nav";
+      document.getElementById("startButtonAddEnd").className = "navbar-inverse navbar-nav";
     }
     document.getElementById("startButtonCreateMazeOne").className = "navbar-inverse navbar-nav";
     document.getElementById("startButtonCreateMazeTwo").className = "navbar-inverse navbar-nav";
@@ -1053,6 +1105,7 @@ Board.prototype.toggleButtons = function() {
     document.getElementById("startButtonAStar").onclick = null;
     document.getElementById("startButtonGreedy").onclick = null;
     document.getElementById("startButtonAddObject").onclick = null;
+    document.getElementById("startButtonAddEnd").onclick = null;
     document.getElementById("startButtonAStar2").onclick = null;
     document.getElementById("startButtonAStar3").onclick = null;
     document.getElementById("startButtonBidirectional").onclick = null;
@@ -1077,6 +1130,7 @@ Board.prototype.toggleButtons = function() {
     document.getElementById("startButtonClearWalls").className = "navbar-inverse navbar-nav disabledA";
     document.getElementById("startButtonClearBoard").className = "navbar-inverse navbar-nav disabledA";
     document.getElementById("startButtonAddObject").className = "navbar-inverse navbar-nav disabledA";
+    document.getElementById("startButtonAddEnd").className = "navbar-inverse navbar-nav disabledA";
     document.getElementById("startButtonCreateMazeOne").className = "navbar-inverse navbar-nav disabledA";
     document.getElementById("startButtonCreateMazeTwo").className = "navbar-inverse navbar-nav disabledA";
     document.getElementById("startButtonCreateMazeThree").className = "navbar-inverse navbar-nav disabledA";
