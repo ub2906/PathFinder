@@ -30,4 +30,7 @@ We can allocate weight to random nodes. It can be thought that the Grid is fores
 The stopOver node is added to the grid on clicking the button on navigation menu and can be dragged/moved at random positions.It can be thought of as the stop-over destination (fuel station etc) that the agent MUST visit before reaching the target/
 
 # Mazes 
-In addition to all these features, the web app also contains pre-defined mazes such as  Basic random maze,weighted maze,Step Maze etc to add a bit of fun element to the already existing mazes and seeing how our rover would navigate through it!
+The web app also contains pre-defined mazes such as  Basic random maze,weighted maze,Step Maze etc to add a bit of fun element to the already existing mazes and seeing how our rover would navigate through it!
+
+# Speed Setting
+In addition to all of these amazing features we can also set the speed to viaualise the algorithm on a speed of our choice(Fast,Average,Slow) to have a deeper knowledge of the working of the algorithm.
