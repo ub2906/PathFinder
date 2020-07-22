@@ -1255,7 +1255,7 @@ module.exports = mazeGenerationAnimations;
       }
   
       document.getElementById("startButtonClearBoard").onclick = () => {
-        document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Bomb</a></li>';
+        document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Stop</a></li>';
         document.getElementById("startButtonAddEnd").innerHTML='<a href"#">Add End</a></li>';
   
   
@@ -1345,7 +1345,7 @@ module.exports = mazeGenerationAnimations;
             if (this.target === objectNodeId || this.start === objectNodeId || this.numberOfObjects === 1) {
               console.log("Failure to place object.");
             } else {
-              document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Remove Bomb</a></li>';
+              document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Remove Stop</a></li>';
               this.clearPath("clickedButton");
               this.object = objectNodeId;
               this.numberOfObjects = 1;
@@ -1354,7 +1354,7 @@ module.exports = mazeGenerationAnimations;
             }
           } else {
             let objectNodeId = this.object;
-            document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Bomb</a></li>';
+            document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Stop</a></li>';
             document.getElementById(objectNodeId).className = "unvisited";
             this.object = null;
             this.numberOfObjects = 0;
