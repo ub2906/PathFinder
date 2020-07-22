@@ -1021,7 +1021,7 @@ Board.prototype.toggleButtons = function() {
           if (this.target === objectNodeId || this.start === objectNodeId || this.numberOfObjects === 1) {
             console.log("Failure to place object.");
           } else {
-            document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Remove Bomb</a></li>';
+            document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Remove Stop</a></li>';
             this.clearPath("clickedButton");
             this.object = objectNodeId;
             this.numberOfObjects = 1;
