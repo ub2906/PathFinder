@@ -180,7 +180,7 @@
 }
 
 .visitedObjectNode {
-  background-image: url(diamond.svg);
+  background-image: url(stop.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -637,7 +637,7 @@
 
 .object{
   /*border: 1px solid rgb(175, 216, 248);*/
-  background-image: url(diamond.svg);
+  background-image: url(stop.png);
   /*background-color: rgb(255, 254, 106);*/
   background-position: center;
   background-repeat: no-repeat;
@@ -655,7 +655,7 @@
 .instantobjectTransparent{
   /*border: 1px solid rgb(175, 216, 248);*/
   opacity: 0.5;
-  background-image: url(diamond.svg);
+  background-image: url(stop.png);
   background-color: rgb(255, 254, 106);
   background-position: center;
   background-repeat: no-repeat;
@@ -665,7 +665,7 @@
 .objectTransparent{
   /*border: 1px solid rgb(175, 216, 248);*/
   opacity: 0.5;
-  background-image: url(diamond.svg);
+  background-image: url(stop.png);
   background-color: rgb(255, 254, 106);
   background-position: center;
   background-repeat: no-repeat;
