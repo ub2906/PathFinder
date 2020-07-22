@@ -39,4 +39,8 @@ function dragElement(elmnt) {
     document.onmouseup = null;
     document.onmousemove = null;
   }
+  
+  $('#hide_instructions').click(function() {
+    $('#instructions_panel').slideUp();
+});
 }
