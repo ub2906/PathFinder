@@ -931,7 +931,7 @@ Board.prototype.toggleButtons = function() {
     }
 
     document.getElementById("startButtonClearBoard").onclick = () => {
-      document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Bomb</a></li>';
+      document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Stop</a></li>';
       document.getElementById("startButtonAddEnd").innerHTML='<a href"#">Add End</a></li>';
 
 
@@ -1030,7 +1030,7 @@ Board.prototype.toggleButtons = function() {
           }
         } else {
           let objectNodeId = this.object;
-          document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Bomb</a></li>';
+          document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Stop</a></li>';
           document.getElementById(objectNodeId).className = "unvisited";
           this.object = null;
           this.numberOfObjects = 0;
