@@ -4,6 +4,8 @@ This project's goal is to aid a mars rover powered by AI to find its path to it'
 
 # Algorithms used
 
+We have used 5 algorithms that use hueristics i.e are based on AI to help find shortest path,namely- A*,Greedy Best-first, Swarm, Convergent Swarm,Bidirectional Swarm,along with some other simple yet effecient algorithms such as dijkstra, bfs,dfs.Lets meet the algos used!
+
 Dijkstra's Algorithm (weighted):for finding the shortest paths between nodes in a graph, which may represent, for example, road networks. ; GIVES SHORTEST PATH
 
 A Search* (weighted): A* is a graph traversal and path search algorithm which uses heuristics, It is often used in many fields of computer science due to its completeness, optimality, and optimal efficiency. One major practical drawback is its space complexity, as it stores all generated nodes in memory;  FASTER THAN DIJKSTRA; GIVES SHORTEST PATH
@@ -24,8 +26,8 @@ Depth-first Search (unweighted):Depth-first search (DFS) is an algorithm for tra
 # Weighted Nodes
 We can allocate weight to random nodes. It can be thought that the Grid is forest and the weight nodes are the "dense" portions while the others are lighter(preferred for easier movement).Hence the rover would try to avoid going through it when finding shortest path.However if it calculates that going through the weightnode is the only viable solution left, it will go through it as well!
 
-# Bombs
-The bomb is added to the grid on clicking the button on navigation menu and can be dragged/moved at random positions.It can break the walls and need to be diffused first by the rover on its way to the destination
+# StopOver nodes
+The stopOver node is added to the grid on clicking the button on navigation menu and can be dragged/moved at random positions.It can be thought of as the stop-over destination (fuel station etc) that the agent MUST visit before reaching the target/
 
 # Mazes 
 In addition to all these features, the web app also contains pre-defined mazes such as  Basic random maze,weighted maze,Step Maze etc to add a bit of fun element to the already existing mazes and seeing how our rover would navigate through it!
