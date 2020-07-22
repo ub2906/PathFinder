@@ -27,18 +27,6 @@
   text-decoration: underline;
   display: none;
 }
-.white {
-  color: #fff;
-}
-
-.green {
-  color: #0d0;
-}
-
-.red {
-  color: #ff9166;
-}
-
 .spinner {
   width: 2em;
 }
