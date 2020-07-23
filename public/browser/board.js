@@ -932,7 +932,7 @@ Board.prototype.toggleButtons = function() {
 
     document.getElementById("startButtonClearBoard").onclick = () => {
       document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Stop</a></li>';
-      document.getElementById("startButtonAddEnd").innerHTML='<a href"#">Add End</a></li>';
+      document.getElementById("startButtonAddEnd").innerHTML='<a href"#">Add T2</a></li>';
 
 
       let navbarHeight = document.getElementById("navbarDiv").clientHeight;
@@ -1051,7 +1051,7 @@ Board.prototype.toggleButtons = function() {
           if (this.target === endNodeId || this.start === endNodeId || this.numberOfEnds === 1) {
             console.log("Failure to place object.");
           } else {
-            document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Remove End</a></li>';
+            document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Remove T2</a></li>';
             this.clearPath("clickedButton");
             this.end = endNodeId;
             this.numberOfEnds = 1;
@@ -1060,7 +1060,7 @@ Board.prototype.toggleButtons = function() {
           }
         } else {
           let endNodeId = this.end;
-          document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add End</a></li>';
+          document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add T2</a></li>';
           document.getElementById(endNodeId).className = "unvisited";
           this.end = null;
           this.numberOfEnds = 0;
