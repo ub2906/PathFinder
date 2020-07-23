@@ -38,3 +38,6 @@ The web app also contains pre-defined mazes such as Basic random maze, weighted 
 
 # Speed Setting
 In addition to all of these amazing features we can also set the speed to visualise the algorithm on a speed of our choice(Fast,Average,Slow) to have a deeper knowledge of the working of the algorithm.
+
+# UI/UX
+Last but not the least,addition of animations,martian colours and usage of relevant icons along with easy navigation has been added to provide ease to the user and to keep the project as close to the theme given! 
