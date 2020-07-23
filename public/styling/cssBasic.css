@@ -254,6 +254,20 @@
   animation-fill-mode: forwards;
   animation-play-state: running;
 }
+.visitedendNode {
+  background-image: url(destination.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  animation-name: visitedStartNodeBlueAnimation;
+  animation-duration: 2.0s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
 .visitedendNodeBlue {
   background-image: url(destination.png);
   background-position: center;
@@ -738,6 +752,32 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running;
+}
+.endTransparent{
+  /*border: 1px solid rgb(175, 216, 248);*/
+  opacity: 0.5;
+  background-image: url(destination.png);
+  background-color: rgb(255, 254, 106);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  animation-name: specialNodes;
+  animation-duration: 2.0s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+.instantendTransparent{
+  /*border: 1px solid rgb(175, 216, 248);*/
+  opacity: 0.5;
+  background-image: url(destination.png);
+  background-color: rgb(255, 254, 106);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 @keyframes specialNodes {
   0% {
