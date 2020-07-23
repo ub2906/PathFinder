@@ -1532,8 +1532,9 @@ module.exports = mazeGenerationAnimations;
         mazeGenerationAnimations(this);
       }
   
-      document.getElementById("startButtonAddObject").onclick = () => {
+    document.getElementById("startButtonAddObject").onclick = () => {
         let innerHTML = document.getElementById("startButtonAddObject").innerHTML;
+        document.getElementById("endLegend").className = "";
         if (this.currentAlgorithm !== "bidirectional") {
           if (innerHTML.includes("Add")) {
             let r = Math.floor(this.height / 2);
@@ -1543,6 +1544,7 @@ module.exports = mazeGenerationAnimations;
               console.log("Failure to place object.");
             } else {
               document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Remove Stop</a></li>';
+              document.getElementById("endLegend").className = "strikethrough";
               this.clearPath("clickedButton");
               this.object = objectNodeId;
               this.numberOfObjects = 1;
@@ -1552,6 +1554,7 @@ module.exports = mazeGenerationAnimations;
           } else {
             let objectNodeId = this.object;
             document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Stop</a></li>';
+            document.getElementById("endLegend").className = "";
             document.getElementById(objectNodeId).className = "unvisited";
             this.object = null;
             this.numberOfObjects = 0;
@@ -1560,8 +1563,8 @@ module.exports = mazeGenerationAnimations;
             this.clearPath("clickedButton");
           }
         }
-  
       }
+    
       document.getElementById("startButtonAddEnd").onclick = () => {
         let innerHTML = document.getElementById("startButtonAddEnd").innerHTML;
         document.getElementById("bombLegend").className = "";
