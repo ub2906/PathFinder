@@ -16,7 +16,7 @@ Swarm Algorithm (weighted): s a metaheuristic algorithm based on the concept of 
 
 Convergent Swarm Algorithm (weighted): the faster, more heuristic-heavy version of Swarm;  NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
 
-Bidirectional Swarm Algorithm (weighted): Swarm from both sides; NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
+Bidirectional Swarm Algorithm (weighted): Swarm Algorithm from both sides; NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
 
 Breadth-first Search (unweighted): ;Breadth-first search is an algorithm for traversing or searching tree or graph data structures. It starts at the tree root, and explores all of the neighbor nodes at the present depth prior to moving on to the nodes at the next depth level; GIVES SHORTEST PATH
 
@@ -25,16 +25,16 @@ Depth-first Search (unweighted):Depth-first search (DFS) is an algorithm for tra
 ## UNIQUE FEATURES 
 
 # Adding Another Target Node
-Adding a new twist to the normal pathfinding project, we can now add two destinations for the rover! The rover would calculate the shortest path to both the targets and then chose to go first to the nearest target, and then find the shortest path to the next target. In the process of doing so it would convert the first target reached to a "stop-over" node (see below) which would help the user identify the first and the final destination.
+Adding a new twist to the normal pathfinding project, we can now add two destinations for the rover! The rover would calculate the shortest path that would go through both the target nodes. It would first choose to go to the nearest target, and then to the next target. In the process of doing so it would convert the first target reached to a "stop-over" node (see below) which would help the user identify the first and the final destination.
 
 # Weighted Nodes
-We can allocate weight to random nodes. It can be thought that the Grid is forest and the weight nodes are the "dense" portions while the others are lighter(preferred for easier movement).Hence the rover would try to avoid going through it when finding shortest path.However if it calculates that going through the weightnode is the only viable solution left, it will go through it as well!
+We can allocate weight to random nodes. It can be thought that the Grid is forest and the weight nodes are the "dense" portions while the others are lighter(preferred for easier movement).Hence the rover would try to avoid going through it when finding shortest path. However if it calculates that going through the weightnode is the only viable solution left, it will go through it as well!
 
 # StopOver nodes
-The stopOver node is added to the grid on clicking the button on navigation menu and can be dragged/moved at random positions.It can be thought of as the stop-over destination (fuel station etc) that the agent MUST visit before reaching the target/
+The stopOver node is added to the grid on clicking the button on navigation menu and can be dragged/moved at random positions. It can be thought of as the intermediate/stop-over destination (fuel station etc.) that the agent MUST visit before reaching the target.
 
 # Mazes 
-The web app also contains pre-defined mazes such as  Basic random maze,weighted maze,Step Maze etc to add a bit of fun element to the already existing mazes and seeing how our rover would navigate through it!
+The web app also contains pre-defined mazes such as Basic random maze, weighted maze, Step Maze etc to add a bit of fun element to the already existing mazes and seeing how our rover would navigate through it!
 
 # Speed Setting
-In addition to all of these amazing features we can also set the speed to viaualise the algorithm on a speed of our choice(Fast,Average,Slow) to have a deeper knowledge of the working of the algorithm.
+In addition to all of these amazing features we can also set the speed to visualise the algorithm on a speed of our choice(Fast,Average,Slow) to have a deeper knowledge of the working of the algorithm.
