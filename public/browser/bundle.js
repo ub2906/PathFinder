@@ -1545,6 +1545,7 @@ module.exports = mazeGenerationAnimations;
             } else {
               document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Remove Stop</a></li>';
               document.getElementById("endLegend").className = "strikethrough";
+              document.getElementById("startButtonAddEnd").className = "navbar-inverse navbar-nav disabledA";
               this.clearPath("clickedButton");
               this.object = objectNodeId;
               this.numberOfObjects = 1;
@@ -1578,6 +1579,7 @@ module.exports = mazeGenerationAnimations;
             } else {
                 document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Remove T2</a></li>'
                 document.getElementById("bombLegend").className = "strikethrough"
+                document.getElementById("startButtonAddObject").className = "navbar-inverse navbar-nav disabledA";
               this.clearPath("clickedButton");
               this.end = endNodeId;
               this.numberOfEnds = 1;
