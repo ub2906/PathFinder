@@ -1,5 +1,5 @@
 const weightedSearchAlgorithm = require("../pathfindingAlgorithms/weightedSearchAlgorithm");
-const unweightedSearchAlgorithm = require("../pathfindingAlgorithms/unweightedSearchAlgorithm");
+const DFSnBFS = require("../pathfindingAlgorithms/DFSnBFS");
 
 function launchAnimations(board, success, type, object, algorithm, heuristic) {
   let nodes = object ? board.objectNodesToAnimate.slice(0) : board.nodesToAnimate.slice(0);
@@ -22,7 +22,7 @@ function launchAnimations(board, success, type, object, algorithm, heuristic) {
               if (type === "weighted") {
                 newSuccess = weightedSearchAlgorithm(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm, heuristic);
               } else {
-                newSuccess = unweightedSearchAlgorithm(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
+                newSuccess = DFSnBFS(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
               }
             }
             document.getElementById(board.object).className = "visitedObjectNode";
@@ -121,7 +121,7 @@ function launchAnimations(board, success, type, object, algorithm, heuristic) {
           if (type === "weighted") {
             newSuccess = weightedSearchAlgorithm(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
           } else {
-            newSuccess = unweightedSearchAlgorithm(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
+            newSuccess = DFSnBFS(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
           }
           launchAnimations(board, newSuccess, type);
           return;
