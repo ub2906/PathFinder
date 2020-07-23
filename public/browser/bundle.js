@@ -1,6 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 const weightedSearchAlgorithm = require("../pathfindingAlgorithms/weightedSearchAlgorithm");
-const unweightedSearchAlgorithm = require("../pathfindingAlgorithms/unweightedSearchAlgorithm");
+const DFSnBFS = require("../pathfindingAlgorithms/DFSnBFS");
 
 function launchAnimations(board, success, type, object, algorithm, heuristic) {
   let nodes = object ? board.objectNodesToAnimate.slice(0) : board.nodesToAnimate.slice(0);
@@ -23,7 +23,7 @@ function launchAnimations(board, success, type, object, algorithm, heuristic) {
               if (type === "weighted") {
                 newSuccess = weightedSearchAlgorithm(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm, heuristic);
               } else {
-                newSuccess = unweightedSearchAlgorithm(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
+                newSuccess = DFSnBFS(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
               }
             }
             document.getElementById(board.object).className = "visitedObjectNode";
@@ -122,7 +122,7 @@ function launchAnimations(board, success, type, object, algorithm, heuristic) {
           if (type === "weighted") {
             newSuccess = weightedSearchAlgorithm(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
           } else {
-            newSuccess = unweightedSearchAlgorithm(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
+            newSuccess = DFSnBFS(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
           }
           launchAnimations(board, newSuccess, type);
           return;
@@ -174,9 +174,9 @@ function launchAnimations(board, success, type, object, algorithm, heuristic) {
 
 module.exports = launchAnimations;
 
-},{"../pathfindingAlgorithms/unweightedSearchAlgorithm":15,"../pathfindingAlgorithms/weightedSearchAlgorithm":16}],2:[function(require,module,exports){
+},{"../pathfindingAlgorithms/DFSnBFS":15,"../pathfindingAlgorithms/weightedSearchAlgorithm":16}],2:[function(require,module,exports){
 const weightedSearchAlgorithm = require("../pathfindingAlgorithms/weightedSearchAlgorithm");
-const unweightedSearchAlgorithm = require("../pathfindingAlgorithms/unweightedSearchAlgorithm");
+const DFSnBFS = require("../pathfindingAlgorithms/DFSnBFS");
 
 function launchInstantAnimations(board, success, type, object, algorithm, heuristic) {
   let nodes = object ? board.objectNodesToAnimate.slice(0) : board.nodesToAnimate.slice(0);
@@ -197,7 +197,7 @@ function launchInstantAnimations(board, success, type, object, algorithm, heuris
       if (type === "weighted") {
         newSuccess = weightedSearchAlgorithm(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm, heuristic);
       } else {
-        newSuccess = unweightedSearchAlgorithm(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
+        newSuccess = DFSnBFS(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
       }
       launchInstantAnimations(board, newSuccess, type);
       shortestNodes = board.objectShortestPathNodesToAnimate.concat(board.shortestPathNodesToAnimate);
@@ -240,7 +240,7 @@ function launchInstantAnimations(board, success, type, object, algorithm, heuris
     if (type === "weighted") {
       newSuccess = weightedSearchAlgorithm(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
     } else {
-      newSuccess = unweightedSearchAlgorithm(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
+      newSuccess = DFSnBFS(board.nodes, board.object, board.target, board.nodesToAnimate, board.boardArray, algorithm);
     }
     launchInstantAnimations(board, newSuccess, type);
   } else {
@@ -292,7 +292,7 @@ function launchInstantAnimations(board, success, type, object, algorithm, heuris
 
 module.exports = launchInstantAnimations;
 
-},{"../pathfindingAlgorithms/unweightedSearchAlgorithm":15,"../pathfindingAlgorithms/weightedSearchAlgorithm":16}],3:[function(require,module,exports){
+},{"../pathfindingAlgorithms/DFSnBFS":15,"../pathfindingAlgorithms/weightedSearchAlgorithm":16}],3:[function(require,module,exports){
 function mazeGenerationAnimations(board) {
   let nodes = board.wallsToAnimate.slice(0);
   let speed = board.speed === "fast" ?
@@ -321,7 +321,7 @@ module.exports = mazeGenerationAnimations;
   const launchInstantAnimations = require("./animations/launchInstantAnimations");
   const mazeGenerationAnimations = require("./animations/mazeGenerationAnimations");
   const weightedSearchAlgorithm = require("./pathfindingAlgorithms/weightedSearchAlgorithm");
-  const unweightedSearchAlgorithm = require("./pathfindingAlgorithms/unweightedSearchAlgorithm");
+  const DFSnBFS = require("./pathfindingAlgorithms/DFSnBFS");
   const recursiveDivisionMaze = require("./mazeAlgorithms/recursiveDivisionMaze");
   const VerticalMaze = require("./mazeAlgorithms/VerticalMaze");
   const HorizontalMaze = require("./mazeAlgorithms/HorizontalMaze");
@@ -889,20 +889,20 @@ module.exports = mazeGenerationAnimations;
               if(x<=y){
                 this.object = this.target;
                 this.target = this.end;
-                success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+                success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
                 launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
               }else{
                 this.object = this.end;
-                success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+                success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
                 launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
               }
             }else{
-            success = unweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
+            success = DFSnBFS(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
             launchAnimations(this, success, "unweighted");
             }
           } else {
             this.isObject = true;
-            success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+            success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
             launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
           }
           this.algoDone = true;
@@ -1054,20 +1054,20 @@ module.exports = mazeGenerationAnimations;
             if(x<y){
               this.object = this.target;
                 this.target = this.end;
-            success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+            success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
             launchInstantAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
           }else{
             this.object=this.end;
-            success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+            success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
             launchInstantAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
           }
         }else{
-        success = unweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
+        success = DFSnBFS(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
         launchInstantAnimations(this, success, "unweighted");
         }
       } else {
         this.isObject = true;
-        success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+        success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
         launchInstantAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
       }
       this.algoDone = true;
@@ -1320,20 +1320,20 @@ module.exports = mazeGenerationAnimations;
                 if(x<y){
                   this.object = this.target;
                   this.target = this.end;
-                  success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+                  success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
                   launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
                 }else{
                   this.object=this.end;
-                  success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+                  success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
                   launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
                 }
               }else{
-              success = unweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
+              success = DFSnBFS(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
               launchAnimations(this, success, "unweighted");
               }
             } else {
               this.isObject = true;
-              success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+              success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
               launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
             }
             this.algoDone = true;
@@ -1371,7 +1371,7 @@ module.exports = mazeGenerationAnimations;
         this.currentHeuristic = "manhattanDistance";
         if (this.numberOfObjects) {
           let objectNodeId = this.object;
-          document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Stop</a></li>';
+          document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add a Bomb</a></li>';
           document.getElementById(objectNodeId).className = "unvisited";
           this.object = null;
           this.numberOfObjects = 0;
@@ -1572,7 +1572,7 @@ module.exports = mazeGenerationAnimations;
             if (this.target === endNodeId || this.start === endNodeId || this.numberOfEnds === 1) {
               console.log("Failure to place object.");
             } else {
-              document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Remove T2</a></li>';
+              document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Remove End</a></li>';
               this.clearPath("clickedButton");
               this.end = endNodeId;
               this.numberOfEnds = 1;
@@ -1581,7 +1581,7 @@ module.exports = mazeGenerationAnimations;
             }
           } else {
             let endNodeId = this.end;
-            document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add T2</a></li>';
+            document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add End</a></li>';
             document.getElementById(endNodeId).className = "unvisited";
             this.end = null;
             this.numberOfEnds = 0;
@@ -1689,7 +1689,7 @@ module.exports = mazeGenerationAnimations;
   }
   
 
-},{"./animations/launchAnimations":1,"./animations/launchInstantAnimations":2,"./animations/mazeGenerationAnimations":3,"./getDistance":5,"./mazeAlgorithms/VerticalMaze":6,"./mazeAlgorithms/HorizontalMaze":7,"./mazeAlgorithms/recursiveDivisionMaze":8,"./mazeAlgorithms/simpleDemonstration":9,"./mazeAlgorithms/stairDemonstration":10,"./mazeAlgorithms/weightsDemonstration":11,"./node":12,"./pathfindingAlgorithms/astar":13,"./pathfindingAlgorithms/bidirectional":14,"./pathfindingAlgorithms/unweightedSearchAlgorithm":15,"./pathfindingAlgorithms/weightedSearchAlgorithm":16}],5:[function(require,module,exports){
+},{"./animations/launchAnimations":1,"./animations/launchInstantAnimations":2,"./animations/mazeGenerationAnimations":3,"./getDistance":5,"./mazeAlgorithms/VerticalMaze":6,"./mazeAlgorithms/HorizontalMaze":7,"./mazeAlgorithms/recursiveDivisionMaze":8,"./mazeAlgorithms/simpleDemonstration":9,"./mazeAlgorithms/stairDemonstration":10,"./mazeAlgorithms/weightsDemonstration":11,"./node":12,"./pathfindingAlgorithms/astar":13,"./pathfindingAlgorithms/bidirectional":14,"./pathfindingAlgorithms/DFSnBFS":15,"./pathfindingAlgorithms/weightedSearchAlgorithm":16}],5:[function(require,module,exports){
 function getDistance(nodeOne, nodeTwo) {
   let currentCoordinates = nodeOne.id.split("-");
   let targetCoordinates = nodeTwo.id.split("-");
@@ -2607,7 +2607,7 @@ function manhattanDistance(nodeOne, nodeTwo) {
 module.exports = bidirectional;
 
 },{"./astar":13}],15:[function(require,module,exports){
-function unweightedSearchAlgorithm(nodes, start, target, nodesToAnimate, boardArray, name) {
+function DFSnBFS(nodes, start, target, nodesToAnimate, boardArray, name) {
   if (!start || !target || start === target) {
     return false;
   }
@@ -2682,7 +2682,7 @@ function getNeighbors(id, nodes, boardArray, name) {
   return neighbors;
 }
 
-module.exports = unweightedSearchAlgorithm;
+module.exports = DFSnBFS;
 
 },{}],16:[function(require,module,exports){
 const astar = require("./astar");
