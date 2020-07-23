@@ -1,5 +1,4 @@
 const getDistance = require("./getDistance");
-const astar = require("./pathfindingAlgorithms/astar");
 function updateNode(currentNode, targetNode, actualTargetNode, name, nodes, actualStartNode, heuristic, boardArray) {
     let distance = getDistance(currentNode, targetNode,name);
     let distanceToCompare;
