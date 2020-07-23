@@ -1564,6 +1564,7 @@ module.exports = mazeGenerationAnimations;
       }
       document.getElementById("startButtonAddEnd").onclick = () => {
         let innerHTML = document.getElementById("startButtonAddEnd").innerHTML;
+        document.getElementById("bombLegend").className = "";
         if (this.currentAlgorithm !== "bidirectional") {
           if (innerHTML.includes("Add")) {
             let r = Math.floor(this.height / 4);
@@ -1572,7 +1573,8 @@ module.exports = mazeGenerationAnimations;
             if (this.target === endNodeId || this.start === endNodeId || this.numberOfEnds === 1) {
               console.log("Failure to place object.");
             } else {
-              document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Remove End</a></li>';
+                document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Remove T2</a></li>'
+                document.getElementById("bombLegend").className = "strikethrough"
               this.clearPath("clickedButton");
               this.end = endNodeId;
               this.numberOfEnds = 1;
@@ -1581,7 +1583,9 @@ module.exports = mazeGenerationAnimations;
             }
           } else {
             let endNodeId = this.end;
-            document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add End</a></li>';
+            document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add T2</a></li>'
+            document.getElementById("bombLegend").className = ""
+              // document.getElementById("startButtonAddObject").className = "navbar-inverse navbar-nav disabledA";
             document.getElementById(endNodeId).className = "unvisited";
             this.end = null;
             this.numberOfEnds = 0;
@@ -1591,7 +1595,6 @@ module.exports = mazeGenerationAnimations;
           }
         }
       }
-      
       document.getElementById("startButtonClearPath").className = "navbar-inverse navbar-nav";
       document.getElementById("startButtonClearWalls").className = "navbar-inverse navbar-nav";
       document.getElementById("startButtonClearBoard").className = "navbar-inverse navbar-nav";
