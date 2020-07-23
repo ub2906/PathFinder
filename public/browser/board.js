@@ -3,7 +3,7 @@ const launchAnimations = require("./animations/launchAnimations");
 const launchInstantAnimations = require("./animations/launchInstantAnimations");
 const mazeGenerationAnimations = require("./animations/mazeGenerationAnimations");
 const weightedSearchAlgorithm = require("./pathfindingAlgorithms/weightedSearchAlgorithm");
-const unweightedSearchAlgorithm = require("./pathfindingAlgorithms/unweightedSearchAlgorithm");
+const DFSnBFS = require("./pathfindingAlgorithms/DFSnBFS");
 const recursiveDivisionMaze = require("./mazeAlgorithms/recursiveDivisionMaze");
 const VerticalMaze = require("./mazeAlgorithms/VerticalMaze");
 const HorizontalMaze = require("./mazeAlgorithms/HorizontalMaze");
@@ -497,11 +497,11 @@ Board.prototype.clearPath = function(clickedButton) {
         this.algoDone = true;
       } else if (unweightedAlgorithms.includes(this.currentAlgorithm)) {
         if (!this.numberOfObjects) {
-          success = unweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
+          success = DFSnBFS(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
           launchAnimations(this, success, "unweighted");
         } else {
           this.isObject = true;
-          success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+          success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
           launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
         }
         this.algoDone = true;
@@ -611,11 +611,11 @@ Board.prototype.instantAlgorithm = function() {
     this.algoDone = true;
   } else if (unweightedAlgorithms.includes(this.currentAlgorithm)) {
     if (!this.numberOfObjects) {
-      success = unweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
+      success = DFSnBFS(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
       launchInstantAnimations(this, success, "unweighted");
     } else {
       this.isObject = true;
-      success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+      success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
       launchInstantAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
     }
     this.algoDone = true;
@@ -809,11 +809,11 @@ Board.prototype.toggleButtons = function() {
           this.algoDone = true;
         } else if (unweightedAlgorithms.includes(this.currentAlgorithm)) {
           if (!this.numberOfObjects) {
-            success = unweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
+            success = DFSnBFS(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
             launchAnimations(this, success, "unweighted");
           } else {
             this.isObject = true;
-            success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+            success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
             launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
           }
           this.algoDone = true;
