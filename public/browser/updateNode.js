@@ -33,19 +33,9 @@ function updateNode(currentNode, targetNode, actualTargetNode, name, nodes, actu
     let nodeOneCoordinates = nodeOne.id.split("-").map(ele => parseInt(ele));
     let nodeTwoCoordinates = nodeTwo.id.split("-").map(ele => parseInt(ele));
     let xChange,yChange;
-    if(name === astar){
-      let xOne = nodeOneCoordinates[0];
-      let xTwo = nodeTwoCoordinates[0];
-      let yOne = nodeOneCoordinates[1];
-      let yTwo = nodeTwoCoordinates[1];
+    xChange = Math.abs(nodeOneCoordinates[0] - nodeTwoCoordinates[0]);
+    yChange = Math.abs(nodeOneCoordinates[1] - nodeTwoCoordinates[1]);
     
-      xChange = Math.abs(xOne - xTwo);
-      yChange = Math.abs(yOne - yTwo);
-    }
-    else{
-      xChange = Math.abs(nodeOneCoordinates[0] - nodeTwoCoordinates[0]);
-      yChange = Math.abs(nodeOneCoordinates[1] - nodeTwoCoordinates[1]);
-    }
     return (xChange + yChange);
   }
   module.export = updateNode;
