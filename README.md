@@ -22,6 +22,10 @@ Breadth-first Search (unweighted): ;Breadth-first search is an algorithm for tra
 
 Depth-first Search (unweighted):Depth-first search (DFS) is an algorithm for traversing or searching tree or graph data structures. The algorithm starts at the root node (selecting some arbitrary node as the root node in the case of a graph) and explores as far as possible along each branch before backtracking; NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
 
+## UNIQUE FEATURES 
+
+# Adding Another Target Node
+Adding a new twist to the normal pathfinding project, we can now add two destinations for the rover! The rover would calculate the shortest path to both the targets and then chose to go first to the nearest target, and then find the shortest path to the next target. In the process of doing so it would convert the first target reached to a "stop-over" node (see below) which would help the user identify the first and the final destination.
 
 # Weighted Nodes
 We can allocate weight to random nodes. It can be thought that the Grid is forest and the weight nodes are the "dense" portions while the others are lighter(preferred for easier movement).Hence the rover would try to avoid going through it when finding shortest path.However if it calculates that going through the weightnode is the only viable solution left, it will go through it as well!
