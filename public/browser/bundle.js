@@ -356,6 +356,7 @@ module.exports = mazeGenerationAnimations;
     this.currentAlgorithm = null;
     this.currentHeuristic = null;
     this.numberOfObjects = 0;
+    this.numberOfEnds=0;
     this.isObject = false;
     this.isEnd = false;
     this.buttonsOn = false;
@@ -531,7 +532,7 @@ module.exports = mazeGenerationAnimations;
     }
   };
   
-  Board.prototype.drawShortestPath = function(targetNodeId, startNodeId, object, end) {
+  Board.prototype.drawShortestPath = function(targetNodeId, startNodeId, object, endNodeId) {
     let currentNode;
     if (this.currentAlgorithm !== "bidirectional") {
       currentNode = this.nodes[this.nodes[targetNodeId].previousNode];
@@ -594,7 +595,7 @@ module.exports = mazeGenerationAnimations;
     }
   };
   
-  Board.prototype.addShortestPath = function(targetNodeId, startNodeId, object,end) {
+  Board.prototype.addShortestPath = function(targetNodeId, startNodeId, object) {
     let currentNode = this.nodes[this.nodes[targetNodeId].previousNode];
     if (object) {
       while (currentNode.id !== startNodeId) {
@@ -605,14 +606,6 @@ module.exports = mazeGenerationAnimations;
     } else {
       while (currentNode.id !== startNodeId) {
         this.shortestPathNodesToAnimate.unshift(currentNode);
-        currentNode = this.nodes[currentNode.previousNode];
-      }
-    }
-    if (end) {
-      currentNode = this.nodes[this.nodes[endNodeId].previousNode];
-      while (currentNode.id !== targetNodeId) {
-        this.objectShortestPathNodesToAnimate.unshift(currentNode);
-        currentNode.relatesToObject = true;
         currentNode = this.nodes[currentNode.previousNode];
       }
     }
@@ -704,7 +697,10 @@ module.exports = mazeGenerationAnimations;
       if (currentNode === "object") {
         let element = document.getElementById(board.object);
         element.className = "objectTransparent";
-      } else if (currentNode.id !== board.start) {
+      } else if (currentNode === "end") {
+        let element = document.getElementById(board.end);
+        element.className = "endTransparent";
+      }else if (currentNode.id !== board.start) {
         if (currentNode.id !== board.target || currentNode.id === board.target && isActualTarget) {
           let currentHTMLNode = document.getElementById(currentNode.id);
           if (type === "unweighted") {
@@ -741,18 +737,13 @@ module.exports = mazeGenerationAnimations;
         element.className = "startTransparent";
       }
     }
-  
-  
-  
-  
-  
   };
   
   Board.prototype.createMazeOne = function(type) {
     Object.keys(this.nodes).forEach(node => {
       let random = Math.random();
       let currentHTMLNode = document.getElementById(node);
-      let relevantClassNames = ["start", "target", "object"]
+      let relevantClassNames = ["start", "target", "object","end"]
       let randomTwo = type === "wall" ? 0.25 : 0.35;
       if (random < randomTwo && !relevantClassNames.includes(currentHTMLNode.className)) {
         if (type === "wall") {
@@ -773,6 +764,7 @@ module.exports = mazeGenerationAnimations;
       let start = this.nodes[this.start];
       let target = this.nodes[this.target];
       let object = this.numberOfObjects ? this.nodes[this.object] : null;
+      let end = this.numberOfEnds ? this.nodes[this.end] : null;
       start.status = "start";
       document.getElementById(start.id).className = "start";
       target.status = "target";
@@ -780,6 +772,10 @@ module.exports = mazeGenerationAnimations;
       if (object) {
         object.status = "object";
         document.getElementById(object.id).className = "object";
+      }
+      if (end) {
+        end.status = "end";
+        document.getElementById(end.id).className = "end";
       }
     }
   
@@ -802,8 +798,36 @@ module.exports = mazeGenerationAnimations;
           this.algoDone = true;
         } else if (this.currentAlgorithm === "astar") {
           if (!this.numberOfObjects) {
+            if(this.numberOfEnds){
+              this.isEnd = true;
+              this.isObject = true;
+              let x = manhattanDistance(this.nodes[this.start],this.nodes[this.target],name);
+              let y = manhattanDistance(this.nodes[this.start],this.nodes[this.end],name);
+              function manhattanDistance(nodeOne, nodeTwo,name) {
+                let nodeOneCoordinates = nodeOne.id.split("-").map(ele => parseInt(ele));
+                let nodeTwoCoordinates = nodeTwo.id.split("-").map(ele => parseInt(ele));
+                let xChange,yChange;
+                  xChange = Math.abs(nodeOneCoordinates[0] - nodeTwoCoordinates[0]);
+                  yChange = Math.abs(nodeOneCoordinates[1] - nodeTwoCoordinates[1]);
+                
+                return (xChange + yChange);
+              }
+              if(x<=y){
+                console.log("x");
+                this.object = this.target;
+                this.target = this.end;
+                success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+                launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+              }else{
+                console.log("y",y); 
+                this.object = this.end;
+                success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+                launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+              }
+            }else{
             success = weightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
             launchAnimations(this, success, "weighted");
+            }
           } else {
             this.isObject = true;
             success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
@@ -812,8 +836,34 @@ module.exports = mazeGenerationAnimations;
           this.algoDone = true;
         } else if (weightedAlgorithms.includes(this.currentAlgorithm)) {
           if (!this.numberOfObjects) {
+            if(this.numberOfEnds){
+              this.isEnd = true;
+              this.isObject = true;
+              let x = manhattanDistance(this.nodes[this.start],this.nodes[this.target],name);
+              let y = manhattanDistance(this.nodes[this.start],this.nodes[this.end],name);
+              function manhattanDistance(nodeOne, nodeTwo,name) {
+                let nodeOneCoordinates = nodeOne.id.split("-").map(ele => parseInt(ele));
+                let nodeTwoCoordinates = nodeTwo.id.split("-").map(ele => parseInt(ele));
+                let xChange,yChange;
+                  xChange = Math.abs(nodeOneCoordinates[0] - nodeTwoCoordinates[0]);
+                  yChange = Math.abs(nodeOneCoordinates[1] - nodeTwoCoordinates[1]);
+                
+                return (xChange + yChange);
+              }
+              if(x<=y){
+                this.object = this.target;
+                this.target = this.end;
+                success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+                launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+              }else{
+                this.object = this.end;
+                success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+                launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+              }
+            }else{
             success = weightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
             launchAnimations(this, success, "weighted");
+            }
           } else {
             this.isObject = true;
             success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
@@ -822,8 +872,34 @@ module.exports = mazeGenerationAnimations;
           this.algoDone = true;
         } else if (unweightedAlgorithms.includes(this.currentAlgorithm)) {
           if (!this.numberOfObjects) {
+            if(this.numberOfEnds){
+              this.isEnd = true;
+              this.isObject = true;
+              let x = manhattanDistance(this.nodes[this.start],this.nodes[this.target],name);
+              let y = manhattanDistance(this.nodes[this.start],this.nodes[this.end],name);
+              function manhattanDistance(nodeOne, nodeTwo,name) {
+                let nodeOneCoordinates = nodeOne.id.split("-").map(ele => parseInt(ele));
+                let nodeTwoCoordinates = nodeTwo.id.split("-").map(ele => parseInt(ele));
+                let xChange,yChange;
+                  xChange = Math.abs(nodeOneCoordinates[0] - nodeTwoCoordinates[0]);
+                  yChange = Math.abs(nodeOneCoordinates[1] - nodeTwoCoordinates[1]);
+                
+                return (xChange + yChange);
+              }
+              if(x<=y){
+                this.object = this.target;
+                this.target = this.end;
+                success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+                launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
+              }else{
+                this.object = this.end;
+                success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+                launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
+              }
+            }else{
             success = unweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
             launchAnimations(this, success, "unweighted");
+            }
           } else {
             this.isObject = true;
             success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
@@ -849,7 +925,7 @@ module.exports = mazeGenerationAnimations;
       currentNode.otherdistance = Infinity;
       currentNode.otherdirection = null;
       let currentHTMLNode = document.getElementById(id);
-      let relevantStatuses = ["wall", "start", "target", "object"];
+      let relevantStatuses = ["wall", "start", "target", "object","end"];
       if ((!relevantStatuses.includes(currentNode.status) || currentHTMLNode.className === "visitedobject") && currentNode.weight !== 15) {
         currentNode.status = "unvisited";
         currentHTMLNode.className = "unvisited";
@@ -894,7 +970,7 @@ module.exports = mazeGenerationAnimations;
       currentNode.heuristicDistance = null;
       currentNode.storedDirection = currentNode.direction;
       currentNode.direction = null;
-      let relevantStatuses = ["wall", "start", "target", "object"];
+      let relevantStatuses = ["wall", "start", "target", "object","end"];
       if (!relevantStatuses.includes(currentNode.status)) {
         currentNode.status = "unvisited";
       }
@@ -915,8 +991,25 @@ module.exports = mazeGenerationAnimations;
       this.algoDone = true;
     } else if (this.currentAlgorithm === "astar") {
       if (!this.numberOfObjects) {
+        if(this.numberOfEnds){
+          this.isEnd = true;
+          this.isObject = true;
+          let x = getDistance(this.nodes[this.start], this.nodes[this.target],name);
+            let y = getDistance(this.nodes[this.start],this.nodes[this.end],name);
+            if(x<y){
+              this.object = this.target;
+                this.target = this.end;
+            success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+            launchInstantAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+          }else{
+            this.object=this.end;
+            success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+            launchInstantAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+          }
+        }else{
         success = weightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
         launchInstantAnimations(this, success, "weighted");
+        }
       } else {
         this.isObject = true;
         success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
@@ -926,8 +1019,25 @@ module.exports = mazeGenerationAnimations;
     }
     if (weightedAlgorithms.includes(this.currentAlgorithm)) {
       if (!this.numberOfObjects) {
+        if(this.numberOfEnds){
+          this.isEnd = true;
+          this.isObject = true;
+          let x = getDistance(this.nodes[this.start], this.nodes[this.target],name);
+            let y = getDistance(this.nodes[this.start],this.nodes[this.end],name);
+            if(x<y){
+              this.object = this.target;
+                this.target = this.end;
+            success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+            launchInstantAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+          }else{
+            this.object=this.end;
+            success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+            launchInstantAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+          }
+        }else{
         success = weightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
         launchInstantAnimations(this, success, "weighted");
+        }
       } else {
         this.isObject = true;
         success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
@@ -936,8 +1046,25 @@ module.exports = mazeGenerationAnimations;
       this.algoDone = true;
     } else if (unweightedAlgorithms.includes(this.currentAlgorithm)) {
       if (!this.numberOfObjects) {
+        if(this.numberOfEnds){
+          this.isEnd = true;
+          this.isObject = true;
+          let x = getDistance(this.nodes[this.start], this.nodes[this.target],name);
+            let y = getDistance(this.nodes[this.start],this.nodes[this.end],name);
+            if(x<y){
+              this.object = this.target;
+                this.target = this.end;
+            success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+            launchInstantAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
+          }else{
+            this.object=this.end;
+            success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+            launchInstantAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
+          }
+        }else{
         success = unweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
         launchInstantAnimations(this, success, "unweighted");
+        }
       } else {
         this.isObject = true;
         success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
@@ -965,7 +1092,19 @@ module.exports = mazeGenerationAnimations;
       }
     }
   };
-  
+  Board.prototype.reset = function(endNotTransparent) {
+    this.nodes[this.start].status = "start";
+    document.getElementById(this.start).className = "startTransparent";
+    this.nodes[this.target].status = "target";
+    if (this.end) {
+      this.nodes[this.end].status = "end";
+      if (endNotTransparent) {
+        document.getElementById(this.end).className = "visitedendNode";
+      } else {
+        document.getElementById(this.end).className = "endTransparent";
+      }
+    }
+  };
   Board.prototype.resetHTMLNodes = function() {
     let start = document.getElementById(this.start);
     let target = document.getElementById(this.target);
@@ -997,6 +1136,8 @@ module.exports = mazeGenerationAnimations;
     }
     if (unweighted.includes(this.currentAlgorithm)) {
       if (this.currentAlgorithm === "dfs") {
+        document.getElementById("endLegend").className = "strikethrough";
+      document.getElementById("startButtonAddEnd").className = "navbar-inverse navbar-nav disabledA";
         document.getElementById("algorithmDescriptor").innerHTML = `${name} is <i><b>unweighted</b></i> and <i><b>does not guarantee</b></i> the shortest path!`;
       } else {
         document.getElementById("algorithmDescriptor").innerHTML = `${name} is <i><b>unweighted</b></i> and <i><b>guarantees</b></i> the shortest path!`;
@@ -1023,6 +1164,8 @@ module.exports = mazeGenerationAnimations;
       document.getElementById("algorithmDescriptor").innerHTML = `${name} is <i><b>weighted</b></i> and <i><b>does not guarantee</b></i> the shortest path!`;
       document.getElementById("bombLegend").className = "strikethrough";
       document.getElementById("startButtonAddObject").className = "navbar-inverse navbar-nav disabledA";
+      document.getElementById("endLegend").className = "strikethrough";
+      document.getElementById("startButtonAddEnd").className = "navbar-inverse navbar-nav disabledA";
     } else {
       document.getElementById("bombLegend").className = "";
       document.getElementById("startButtonAddObject").className = "navbar-inverse navbar-nav";
@@ -1049,12 +1192,6 @@ module.exports = mazeGenerationAnimations;
         this.toggleTutorialButtons();
       }
     }
-  
-    /*document.getElementById("previousButton").onclick = () => {
-      if (counter > 1) counter--;
-      nextPreviousClick();
-      this.toggleTutorialButtons()
-    }*/
   
     let board = this;
     function nextPreviousClick() {
@@ -1114,8 +1251,28 @@ module.exports = mazeGenerationAnimations;
             this.algoDone = true;
           } else if (this.currentAlgorithm === "astar") {
             if (!this.numberOfObjects) {
+              if(this.numberOfEnds){
+                this.isEnd = true;
+                this.isObject = true;
+                let x = getDistance(this.nodes[this.start],this.nodes[this.target],name);
+                let y = getDistance(this.nodes[this.start],this.nodes[this.end],name);
+                
+                if(x<y){
+                  console.log("x");
+                  this.object = this.target;
+                  this.target = this.end;
+                  success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+                  launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+                }else{
+                  console.log("y");
+                  this.object=this.end;
+                  success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+                  launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+                }
+              }else{
               success = weightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
               launchAnimations(this, success, "weighted");
+              }
             } else {
               this.isObject = true;
               success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
@@ -1124,8 +1281,28 @@ module.exports = mazeGenerationAnimations;
             this.algoDone = true;
           } else if (weightedAlgorithms.includes(this.currentAlgorithm)) {
             if (!this.numberOfObjects) {
+              if(this.numberOfEnds){
+                this.isEnd = true;
+                this.isObject = true;
+                let x = getDistance(this.nodes[this.start],this.nodes[this.target],name);
+                let y = getDistance(this.nodes[this.start],this.nodes[this.end],name);
+                
+                if(x<y){
+                  console.log("x");
+                  this.object = this.target;
+                  this.target = this.end;
+                  success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+                  launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+                }else{
+                  console.log("y");
+                  this.object=this.end;
+                  success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+                  launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+                }
+              }else{
               success = weightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
               launchAnimations(this, success, "weighted");
+              }
             } else {
               this.isObject = true;
               success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
@@ -1134,8 +1311,26 @@ module.exports = mazeGenerationAnimations;
             this.algoDone = true;
           } else if (unweightedAlgorithms.includes(this.currentAlgorithm)) {
             if (!this.numberOfObjects) {
+              if(this.numberOfEnds){
+                this.isEnd = true;
+                this.isObject = true;
+                let x = getDistance(this.nodes[this.start],this.nodes[this.target],name);
+                let y = getDistance(this.nodes[this.start],this.nodes[this.end],name);
+                
+                if(x<y){
+                  this.object = this.target;
+                  this.target = this.end;
+                  success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+                  launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
+                }else{
+                  this.object=this.end;
+                  success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+                  launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
+                }
+              }else{
               success = unweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, this.currentAlgorithm);
               launchAnimations(this, success, "unweighted");
+              }
             } else {
               this.isObject = true;
               success = unweightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
@@ -1256,7 +1451,7 @@ module.exports = mazeGenerationAnimations;
   
       document.getElementById("startButtonClearBoard").onclick = () => {
         document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Stop</a></li>';
-        document.getElementById("startButtonAddEnd").innerHTML='<a href"#">Add End</a></li>';
+        document.getElementById("startButtonAddEnd").innerHTML='<a href"#">Add another Target</a></li>';
   
   
         let navbarHeight = document.getElementById("navbarDiv").clientHeight;
@@ -1294,6 +1489,7 @@ module.exports = mazeGenerationAnimations;
         this.start = start;
         this.target = target;
         this.end=null;
+        this.isEnd=false;
         this.object = null;
         this.nodesToAnimate = [];
         this.objectNodesToAnimate = [];
@@ -1308,6 +1504,7 @@ module.exports = mazeGenerationAnimations;
         this.keyDown = false;
         this.algoDone = false;
         this.numberOfObjects = 0;
+        this.numberOfEnds = 0;
         this.isObject = false;
       }
   
@@ -2057,30 +2254,6 @@ function getNeighbors(id, nodes, boardArray) {
     potentialNeighbor = `${x.toString()}-${(y + 1).toString()}`
     if (nodes[potentialNeighbor].status !== "wall") neighbors.push(potentialNeighbor);
   }
-  // if (boardArray[x - 1] && boardArray[x - 1][y - 1]) {
-  //   potentialNeighbor = `${(x - 1).toString()}-${(y - 1).toString()}`
-  //   let potentialWallOne = `${(x - 1).toString()}-${y.toString()}`
-  //   let potentialWallTwo = `${x.toString()}-${(y - 1).toString()}`
-  //   if (nodes[potentialNeighbor].status !== "wall" && !(nodes[potentialWallOne].status === "wall" && nodes[potentialWallTwo].status === "wall")) neighbors.push(potentialNeighbor);
-  // }
-  // if (boardArray[x + 1] && boardArray[x + 1][y - 1]) {
-  //   potentialNeighbor = `${(x + 1).toString()}-${(y - 1).toString()}`
-  //   let potentialWallOne = `${(x + 1).toString()}-${y.toString()}`
-  //   let potentialWallTwo = `${x.toString()}-${(y - 1).toString()}`
-  //   if (nodes[potentialNeighbor].status !== "wall" && !(nodes[potentialWallOne].status === "wall" && nodes[potentialWallTwo].status === "wall")) neighbors.push(potentialNeighbor);
-  // }
-  // if (boardArray[x - 1] && boardArray[x - 1][y + 1]) {
-  //   potentialNeighbor = `${(x - 1).toString()}-${(y + 1).toString()}`
-  //   let potentialWallOne = `${(x - 1).toString()}-${y.toString()}`
-  //   let potentialWallTwo = `${x.toString()}-${(y + 1).toString()}`
-  //   if (nodes[potentialNeighbor].status !== "wall" && !(nodes[potentialWallOne].status === "wall" && nodes[potentialWallTwo].status === "wall")) neighbors.push(potentialNeighbor);
-  // }
-  // if (boardArray[x + 1] && boardArray[x + 1][y + 1]) {
-  //   potentialNeighbor = `${(x + 1).toString()}-${(y + 1).toString()}`
-  //   let potentialWallOne = `${(x + 1).toString()}-${y.toString()}`
-  //   let potentialWallTwo = `${x.toString()}-${(y + 1).toString()}`
-  //   if (nodes[potentialNeighbor].status !== "wall" && !(nodes[potentialWallOne].status === "wall" && nodes[potentialWallTwo].status === "wall")) neighbors.push(potentialNeighbor);
-  // }
   return neighbors;
 }
 
@@ -2165,79 +2338,7 @@ function getDistance(nodeOne, nodeTwo) {
     } else if (nodeOne.direction === "down-left") {
       return [2.5, null, "right"];
     }
-  } /*else if (x2 < x1 && y2 < y1) {
-    if (nodeOne.direction === "up") {
-      return [1.5, ["f"], "up-left"];
-    } else if (nodeOne.direction === "right") {
-      return [2.5, ["l", "f"], "up-left"];
-    } else if (nodeOne.direction === "left") {
-      return [1.5, ["r", "f"], "up-left"];
-    } else if (nodeOne.direction === "down") {
-      return [2.5, ["r", "r", "f"], "up-left"];
-    } else if (nodeOne.direction === "up-right") {
-      return [2, null, "up-left"];
-    } else if (nodeOne.direction === "down-right") {
-      return [3, null, "up-left"];
-    } else if (nodeOne.direction === "up-left") {
-      return [1, null, "up-left"];
-    } else if (nodeOne.direction === "down-left") {
-      return [2, null, "up-left"];
-    }
-  } else if (x2 < x1 && y2 > y1) {
-    if (nodeOne.direction === "up") {
-      return [1.5, ["f"], "up-right"];
-    } else if (nodeOne.direction === "right") {
-      return [1.5, ["l", "f"], "up-right"];
-    } else if (nodeOne.direction === "left") {
-      return [2.5, ["r", "f"], "up-right"];
-    } else if (nodeOne.direction === "down") {
-      return [2.5, ["r", "r", "f"], "up-right"];
-    } else if (nodeOne.direction === "up-right") {
-      return [1, null, "up-right"];
-    } else if (nodeOne.direction === "down-right") {
-      return [2, null, "up-right"];
-    } else if (nodeOne.direction === "up-left") {
-      return [2, null, "up-right"];
-    } else if (nodeOne.direction === "down-left") {
-      return [3, null, "up-right"];
-    }
-  } else if (x2 > x1 && y2 > y1) {
-    if (nodeOne.direction === "up") {
-      return [2.5, ["f"], "down-right"];
-    } else if (nodeOne.direction === "right") {
-      return [1.5, ["l", "f"], "down-right"];
-    } else if (nodeOne.direction === "left") {
-      return [2.5, ["r", "f"], "down-right"];
-    } else if (nodeOne.direction === "down") {
-      return [1.5, ["r", "r", "f"], "down-right"];
-    } else if (nodeOne.direction === "up-right") {
-      return [2, null, "down-right"];
-    } else if (nodeOne.direction === "down-right") {
-      return [1, null, "down-right"];
-    } else if (nodeOne.direction === "up-left") {
-      return [3, null, "down-right"];
-    } else if (nodeOne.direction === "down-left") {
-      return [2, null, "down-right"];
-    }
-  } else if (x2 > x1 && y2 < y1) {
-    if (nodeOne.direction === "up") {
-      return [2.5, ["f"], "down-left"];
-    } else if (nodeOne.direction === "right") {
-      return [2.5, ["l", "f"], "down-left"];
-    } else if (nodeOne.direction === "left") {
-      return [1.5, ["r", "f"], "down-left"];
-    } else if (nodeOne.direction === "down") {
-      return [1.5, ["r", "r", "f"], "down-left"];
-    } else if (nodeOne.direction === "up-right") {
-      return [3, null, "down-left"];
-    } else if (nodeOne.direction === "down-right") {
-      return [2, null, "down-left"];
-    } else if (nodeOne.direction === "up-left") {
-      return [2, null, "down-left"];
-    } else if (nodeOne.direction === "down-left") {
-      return [1, null, "down-left"];
-    }
-  }*/
+  } 
 }
 
 function manhattanDistance(nodeOne, nodeTwo) {
@@ -2501,156 +2602,7 @@ function manhattanDistance(nodeOne, nodeTwo) {
   return (xChange + yChange);
 }
 
-function weightedManhattanDistance(nodeOne, nodeTwo, nodes) {
-  let nodeOneCoordinates = nodeOne.id.split("-").map(ele => parseInt(ele));
-  let nodeTwoCoordinates = nodeTwo.id.split("-").map(ele => parseInt(ele));
-  let xChange = Math.abs(nodeOneCoordinates[0] - nodeTwoCoordinates[0]);
-  let yChange = Math.abs(nodeOneCoordinates[1] - nodeTwoCoordinates[1]);
 
-  if (nodeOneCoordinates[0] < nodeTwoCoordinates[0] && nodeOneCoordinates[1] < nodeTwoCoordinates[1]) {
-
-    let additionalxChange = 0,
-        additionalyChange = 0;
-    for (let currentx = nodeOneCoordinates[0]; currentx <= nodeTwoCoordinates[0]; currentx++) {
-      let currentId = `${currentx}-${nodeOne.id.split("-")[1]}`;
-      let currentNode = nodes[currentId];
-      additionalxChange += currentNode.weight;
-    }
-    for (let currenty = nodeOneCoordinates[1]; currenty <= nodeTwoCoordinates[1]; currenty++) {
-      let currentId = `${nodeTwoCoordinates[0]}-${currenty}`;
-      let currentNode = nodes[currentId];
-      additionalyChange += currentNode.weight;
-    }
-
-    let otherAdditionalxChange = 0,
-        otherAdditionalyChange = 0;
-    for (let currenty = nodeOneCoordinates[1]; currenty <= nodeTwoCoordinates[1]; currenty++) {
-      let currentId = `${nodeOne.id.split("-")[0]}-${currenty}`;
-      let currentNode = nodes[currentId];
-      additionalyChange += currentNode.weight;
-    }
-    for (let currentx = nodeOneCoordinates[0]; currentx <= nodeTwoCoordinates[0]; currentx++) {
-      let currentId = `${currentx}-${nodeTwoCoordinates[1]}`;
-      let currentNode = nodes[currentId];
-      additionalxChange += currentNode.weight;
-    }
-
-    if (additionalxChange + additionalyChange < otherAdditionalxChange + otherAdditionalyChange) {
-      xChange += additionalxChange;
-      yChange += additionalyChange;
-    } else {
-      xChange += otherAdditionalxChange;
-      yChange += otherAdditionalyChange;
-    }
-  } else if (nodeOneCoordinates[0] < nodeTwoCoordinates[0] && nodeOneCoordinates[1] >= nodeTwoCoordinates[1]) {
-    let additionalxChange = 0,
-        additionalyChange = 0;
-    for (let currentx = nodeOneCoordinates[0]; currentx <= nodeTwoCoordinates[0]; currentx++) {
-      let currentId = `${currentx}-${nodeOne.id.split("-")[1]}`;
-      let currentNode = nodes[currentId];
-      additionalxChange += currentNode.weight;
-    }
-    for (let currenty = nodeOneCoordinates[1]; currenty >= nodeTwoCoordinates[1]; currenty--) {
-      let currentId = `${nodeTwoCoordinates[0]}-${currenty}`;
-      let currentNode = nodes[currentId];
-      additionalyChange += currentNode.weight;
-    }
-
-    let otherAdditionalxChange = 0,
-        otherAdditionalyChange = 0;
-    for (let currenty = nodeOneCoordinates[1]; currenty >= nodeTwoCoordinates[1]; currenty--) {
-      let currentId = `${nodeOne.id.split("-")[0]}-${currenty}`;
-      let currentNode = nodes[currentId];
-      additionalyChange += currentNode.weight;
-    }
-    for (let currentx = nodeOneCoordinates[0]; currentx <= nodeTwoCoordinates[0]; currentx++) {
-      let currentId = `${currentx}-${nodeTwoCoordinates[1]}`;
-      let currentNode = nodes[currentId];
-      additionalxChange += currentNode.weight;
-    }
-
-    if (additionalxChange + additionalyChange < otherAdditionalxChange + otherAdditionalyChange) {
-      xChange += additionalxChange;
-      yChange += additionalyChange;
-    } else {
-      xChange += otherAdditionalxChange;
-      yChange += otherAdditionalyChange;
-    }
-  } else if (nodeOneCoordinates[0] >= nodeTwoCoordinates[0] && nodeOneCoordinates[1] < nodeTwoCoordinates[1]) {
-    let additionalxChange = 0,
-        additionalyChange = 0;
-    for (let currentx = nodeOneCoordinates[0]; currentx >= nodeTwoCoordinates[0]; currentx--) {
-      let currentId = `${currentx}-${nodeOne.id.split("-")[1]}`;
-      let currentNode = nodes[currentId];
-      additionalxChange += currentNode.weight;
-    }
-    for (let currenty = nodeOneCoordinates[1]; currenty <= nodeTwoCoordinates[1]; currenty++) {
-      let currentId = `${nodeTwoCoordinates[0]}-${currenty}`;
-      let currentNode = nodes[currentId];
-      additionalyChange += currentNode.weight;
-    }
-
-    let otherAdditionalxChange = 0,
-        otherAdditionalyChange = 0;
-    for (let currenty = nodeOneCoordinates[1]; currenty <= nodeTwoCoordinates[1]; currenty++) {
-      let currentId = `${nodeOne.id.split("-")[0]}-${currenty}`;
-      let currentNode = nodes[currentId];
-      additionalyChange += currentNode.weight;
-    }
-    for (let currentx = nodeOneCoordinates[0]; currentx >= nodeTwoCoordinates[0]; currentx--) {
-      let currentId = `${currentx}-${nodeTwoCoordinates[1]}`;
-      let currentNode = nodes[currentId];
-      additionalxChange += currentNode.weight;
-    }
-
-    if (additionalxChange + additionalyChange < otherAdditionalxChange + otherAdditionalyChange) {
-      xChange += additionalxChange;
-      yChange += additionalyChange;
-    } else {
-      xChange += otherAdditionalxChange;
-      yChange += otherAdditionalyChange;
-    }
-  } else if (nodeOneCoordinates[0] >= nodeTwoCoordinates[0] && nodeOneCoordinates[1] >= nodeTwoCoordinates[1]) {
-      let additionalxChange = 0,
-          additionalyChange = 0;
-      for (let currentx = nodeOneCoordinates[0]; currentx >= nodeTwoCoordinates[0]; currentx--) {
-        let currentId = `${currentx}-${nodeOne.id.split("-")[1]}`;
-        let currentNode = nodes[currentId];
-        additionalxChange += currentNode.weight;
-      }
-      for (let currenty = nodeOneCoordinates[1]; currenty >= nodeTwoCoordinates[1]; currenty--) {
-        let currentId = `${nodeTwoCoordinates[0]}-${currenty}`;
-        let currentNode = nodes[currentId];
-        additionalyChange += currentNode.weight;
-      }
-
-      let otherAdditionalxChange = 0,
-          otherAdditionalyChange = 0;
-      for (let currenty = nodeOneCoordinates[1]; currenty >= nodeTwoCoordinates[1]; currenty--) {
-        let currentId = `${nodeOne.id.split("-")[0]}-${currenty}`;
-        let currentNode = nodes[currentId];
-        additionalyChange += currentNode.weight;
-      }
-      for (let currentx = nodeOneCoordinates[0]; currentx >= nodeTwoCoordinates[0]; currentx--) {
-        let currentId = `${currentx}-${nodeTwoCoordinates[1]}`;
-        let currentNode = nodes[currentId];
-        additionalxChange += currentNode.weight;
-      }
-
-      if (additionalxChange + additionalyChange < otherAdditionalxChange + otherAdditionalyChange) {
-        xChange += additionalxChange;
-        yChange += additionalyChange;
-      } else {
-        xChange += otherAdditionalxChange;
-        yChange += otherAdditionalyChange;
-      }
-    }
-
-
-  return xChange + yChange;
-
-
-}
 
 module.exports = bidirectional;
 
@@ -2906,154 +2858,6 @@ function manhattanDistance(nodeOne, nodeTwo) {
   return (xChange + yChange);
 }
 
-function weightedManhattanDistance(nodeOne, nodeTwo, nodes) {
-  let nodeOneCoordinates = nodeOne.id.split("-").map(ele => parseInt(ele));
-  let nodeTwoCoordinates = nodeTwo.id.split("-").map(ele => parseInt(ele));
-  let xChange = Math.abs(nodeOneCoordinates[0] - nodeTwoCoordinates[0]);
-  let yChange = Math.abs(nodeOneCoordinates[1] - nodeTwoCoordinates[1]);
-
-  if (nodeOneCoordinates[0] < nodeTwoCoordinates[0] && nodeOneCoordinates[1] < nodeTwoCoordinates[1]) {
-    let additionalxChange = 0,
-        additionalyChange = 0;
-    for (let currentx = nodeOneCoordinates[0]; currentx <= nodeTwoCoordinates[0]; currentx++) {
-      let currentId = `${currentx}-${nodeOne.id.split("-")[1]}`;
-      let currentNode = nodes[currentId];
-      additionalxChange += currentNode.weight;
-    }
-    for (let currenty = nodeOneCoordinates[1]; currenty <= nodeTwoCoordinates[1]; currenty++) {
-      let currentId = `${nodeTwoCoordinates[0]}-${currenty}`;
-      let currentNode = nodes[currentId];
-      additionalyChange += currentNode.weight;
-    }
-
-    let otherAdditionalxChange = 0,
-        otherAdditionalyChange = 0;
-    for (let currenty = nodeOneCoordinates[1]; currenty <= nodeTwoCoordinates[1]; currenty++) {
-      let currentId = `${nodeOne.id.split("-")[0]}-${currenty}`;
-      let currentNode = nodes[currentId];
-      additionalyChange += currentNode.weight;
-    }
-    for (let currentx = nodeOneCoordinates[0]; currentx <= nodeTwoCoordinates[0]; currentx++) {
-      let currentId = `${currentx}-${nodeTwoCoordinates[1]}`;
-      let currentNode = nodes[currentId];
-      additionalxChange += currentNode.weight;
-    }
-
-    if (additionalxChange + additionalyChange < otherAdditionalxChange + otherAdditionalyChange) {
-      xChange += additionalxChange;
-      yChange += additionalyChange;
-    } else {
-      xChange += otherAdditionalxChange;
-      yChange += otherAdditionalyChange;
-    }
-  } else if (nodeOneCoordinates[0] < nodeTwoCoordinates[0] && nodeOneCoordinates[1] >= nodeTwoCoordinates[1]) {
-    let additionalxChange = 0,
-        additionalyChange = 0;
-    for (let currentx = nodeOneCoordinates[0]; currentx <= nodeTwoCoordinates[0]; currentx++) {
-      let currentId = `${currentx}-${nodeOne.id.split("-")[1]}`;
-      let currentNode = nodes[currentId];
-      additionalxChange += currentNode.weight;
-    }
-    for (let currenty = nodeOneCoordinates[1]; currenty >= nodeTwoCoordinates[1]; currenty--) {
-      let currentId = `${nodeTwoCoordinates[0]}-${currenty}`;
-      let currentNode = nodes[currentId];
-      additionalyChange += currentNode.weight;
-    }
-
-    let otherAdditionalxChange = 0,
-        otherAdditionalyChange = 0;
-    for (let currenty = nodeOneCoordinates[1]; currenty >= nodeTwoCoordinates[1]; currenty--) {
-      let currentId = `${nodeOne.id.split("-")[0]}-${currenty}`;
-      let currentNode = nodes[currentId];
-      additionalyChange += currentNode.weight;
-    }
-    for (let currentx = nodeOneCoordinates[0]; currentx <= nodeTwoCoordinates[0]; currentx++) {
-      let currentId = `${currentx}-${nodeTwoCoordinates[1]}`;
-      let currentNode = nodes[currentId];
-      additionalxChange += currentNode.weight;
-    }
-
-    if (additionalxChange + additionalyChange < otherAdditionalxChange + otherAdditionalyChange) {
-      xChange += additionalxChange;
-      yChange += additionalyChange;
-    } else {
-      xChange += otherAdditionalxChange;
-      yChange += otherAdditionalyChange;
-    }
-  } else if (nodeOneCoordinates[0] >= nodeTwoCoordinates[0] && nodeOneCoordinates[1] < nodeTwoCoordinates[1]) {
-    let additionalxChange = 0,
-        additionalyChange = 0;
-    for (let currentx = nodeOneCoordinates[0]; currentx >= nodeTwoCoordinates[0]; currentx--) {
-      let currentId = `${currentx}-${nodeOne.id.split("-")[1]}`;
-      let currentNode = nodes[currentId];
-      additionalxChange += currentNode.weight;
-    }
-    for (let currenty = nodeOneCoordinates[1]; currenty <= nodeTwoCoordinates[1]; currenty++) {
-      let currentId = `${nodeTwoCoordinates[0]}-${currenty}`;
-      let currentNode = nodes[currentId];
-      additionalyChange += currentNode.weight;
-    }
-
-    let otherAdditionalxChange = 0,
-        otherAdditionalyChange = 0;
-    for (let currenty = nodeOneCoordinates[1]; currenty <= nodeTwoCoordinates[1]; currenty++) {
-      let currentId = `${nodeOne.id.split("-")[0]}-${currenty}`;
-      let currentNode = nodes[currentId];
-      additionalyChange += currentNode.weight;
-    }
-    for (let currentx = nodeOneCoordinates[0]; currentx >= nodeTwoCoordinates[0]; currentx--) {
-      let currentId = `${currentx}-${nodeTwoCoordinates[1]}`;
-      let currentNode = nodes[currentId];
-      additionalxChange += currentNode.weight;
-    }
-
-    if (additionalxChange + additionalyChange < otherAdditionalxChange + otherAdditionalyChange) {
-      xChange += additionalxChange;
-      yChange += additionalyChange;
-    } else {
-      xChange += otherAdditionalxChange;
-      yChange += otherAdditionalyChange;
-    }
-  } else if (nodeOneCoordinates[0] >= nodeTwoCoordinates[0] && nodeOneCoordinates[1] >= nodeTwoCoordinates[1]) {
-      let additionalxChange = 0,
-          additionalyChange = 0;
-      for (let currentx = nodeOneCoordinates[0]; currentx >= nodeTwoCoordinates[0]; currentx--) {
-        let currentId = `${currentx}-${nodeOne.id.split("-")[1]}`;
-        let currentNode = nodes[currentId];
-        additionalxChange += currentNode.weight;
-      }
-      for (let currenty = nodeOneCoordinates[1]; currenty >= nodeTwoCoordinates[1]; currenty--) {
-        let currentId = `${nodeTwoCoordinates[0]}-${currenty}`;
-        let currentNode = nodes[currentId];
-        additionalyChange += currentNode.weight;
-      }
-
-      let otherAdditionalxChange = 0,
-          otherAdditionalyChange = 0;
-      for (let currenty = nodeOneCoordinates[1]; currenty >= nodeTwoCoordinates[1]; currenty--) {
-        let currentId = `${nodeOne.id.split("-")[0]}-${currenty}`;
-        let currentNode = nodes[currentId];
-        additionalyChange += currentNode.weight;
-      }
-      for (let currentx = nodeOneCoordinates[0]; currentx >= nodeTwoCoordinates[0]; currentx--) {
-        let currentId = `${currentx}-${nodeTwoCoordinates[1]}`;
-        let currentNode = nodes[currentId];
-        additionalxChange += currentNode.weight;
-      }
-
-      if (additionalxChange + additionalyChange < otherAdditionalxChange + otherAdditionalyChange) {
-        xChange += additionalxChange;
-        yChange += additionalyChange;
-      } else {
-        xChange += otherAdditionalxChange;
-        yChange += otherAdditionalyChange;
-      }
-    }
-
-  return xChange + yChange;
-
-
-}
 
 module.exports = weightedSearchAlgorithm;
 
