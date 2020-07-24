@@ -1,3 +1,4 @@
+//automatic creation of maze in a recursive manner horizontally
 function recursiveDivisionMaze(board, rowStart, rowEnd, colStart, colEnd, orientation, surroundingWalls) {
   if (rowEnd < rowStart || colEnd < colStart) {
     return;
