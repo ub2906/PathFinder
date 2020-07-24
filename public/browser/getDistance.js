@@ -1,3 +1,4 @@
+//retrieves the distances between the current and the target nodes that have to covered in the path
 const astar = require("./pathfindingAlgorithms/astar");
 function getDistance(nodeOne, nodeTwo,name) {
     let currentCoordinates = nodeOne.id.split("-");
