@@ -1,3 +1,4 @@
+//returns the neighbouring nodes to the current node to be appended in the list
 const DFSnBFS = require("./pathfindingAlgorithms/DFSnBFS");
 function getNeighbors(id, nodes, boardArray,name) {
     let coordinates = id.split("-");
