@@ -1,3 +1,4 @@
+//animation to see the working of the algorithms at different speeds when viewing a maze
 function mazeGenerationAnimations(board) {
   let nodes = board.wallsToAnimate.slice(0);
   let speed = board.speed === "fast" ?
