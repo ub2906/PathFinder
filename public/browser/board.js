@@ -13,7 +13,8 @@ const Node = require("./node");
   const simpleDemonstration = require("./mazeAlgorithms/simpleDemonstration");
   const bidirectional = require("./pathfindingAlgorithms/bidirectional");
   const getDistance = require("./getDistance");
-  
+
+  //declaring variables
   function Board(height, width) {
     this.height = height;
     this.width = width;
@@ -44,7 +45,9 @@ const Node = require("./node");
     this.buttonsOn = false;
     this.speed = "fast";
   }
-  
+  /*****
+        initaialising and creating the grid
+        ******/
   Board.prototype.initialise = function() {
     this.createGrid();
     this.addEventListeners();
@@ -78,7 +81,9 @@ const Node = require("./node");
     let board = document.getElementById("board");
     board.innerHTML = tableHTML;
   };
-  
+  /****
+        defining the event listeners
+        *****/
   Board.prototype.addEventListeners = function() {
     let board = this;
     for (let r = 0; r < board.height; r++) {
@@ -213,7 +218,9 @@ const Node = require("./node");
       }
     }
   };
-  
+  /****
+        function to retrieve the nodes for the shortest path
+        *****/
   Board.prototype.drawShortestPath = function(targetNodeId, startNodeId, object, endNodeId) {
     let currentNode;
     if (this.currentAlgorithm !== "bidirectional") {
@@ -276,7 +283,9 @@ const Node = require("./node");
       }
     }
   };
-  
+  /*****
+        appending the nodes to be used in the shortest path
+        *****/
   Board.prototype.addShortestPath = function(targetNodeId, startNodeId, object) {
     let currentNode = this.nodes[this.nodes[targetNodeId].previousNode];
     if (object) {
@@ -440,7 +449,9 @@ const Node = require("./node");
       }
     });
   };
-  
+  /******
+      function defined to clear only the path leaving the other objects untouched
+      *****/
   Board.prototype.clearPath = function(clickedButton) {
     if (clickedButton) {
       let start = this.nodes[this.start];
@@ -460,7 +471,9 @@ const Node = require("./node");
         document.getElementById(end.id).className = "end";
       }
     }
-  
+  /*****
+        defining the function of the visualise button
+        ******/
     document.getElementById("startButtonStart").onclick = () => {
       if (!this.currentAlgorithm) {
         document.getElementById("startButtonStart").innerHTML = '<button class="btn btn-default navbar-btn" type="button">Pick an Algorithm!</button>'
@@ -617,7 +630,9 @@ const Node = require("./node");
       }
     });
   };
-  
+  /*****
+      function to only clear the walls and leave the other nodes unaltred(like target2 and stopOver
+      *****/
   Board.prototype.clearWalls = function() {
     this.clearPath("clickedButton");
     Object.keys(this.nodes).forEach(id => {
@@ -642,7 +657,9 @@ const Node = require("./node");
       }
     });
   }
-  
+  /****
+    to put the nodes back to their original positions
+    *****/
   Board.prototype.clearNodeStatuses = function() {
     Object.keys(this.nodes).forEach(id => {
       let currentNode = this.nodes[id];
@@ -658,7 +675,9 @@ const Node = require("./node");
       }
     })
   };
-  
+  /*****
+      function to implement the path visualisation by calling the instant animation function
+      ******/
   Board.prototype.instantAlgorithm = function() {
     let weightedAlgorithms = ["dijkstra", "CLA", "greedy"];
     let unweightedAlgorithms = ["dfs", "bfs"];
@@ -755,7 +774,7 @@ const Node = require("./node");
       this.algoDone = true;
     }
   };
-  
+
   Board.prototype.redoAlgorithm = function() {
     this.clearPath();
     this.instantAlgorithm();
@@ -793,7 +812,9 @@ const Node = require("./node");
     start.className = "start";
     target.className = "target";
   };
-  
+  /******
+      function to define the algorithm selected
+      ******/
   Board.prototype.changeStartNodeImages = function() {
     let unweighted = ["bfs", "dfs"];
     let strikethrough = ["bfs", "dfs"];
@@ -858,14 +879,16 @@ const Node = require("./node");
       document.getElementById("algorithmDescriptor").innerHTML = `${name} is <i><b>weighted</b></i> and <i><b>guarantees</b></i> the shortest path!`;
     }
   };
-  
+  //tutorial button
   Board.prototype.toggleTutorialButtons = function() {
     document.getElementById("launchButton").onclick = () => {
       document.getElementById("tutorial").style.display = "none";
       this.toggleButtons();
     }
   };
-  
+  /*****
+      defining the toggle buttons and their functions
+      ******/
   Board.prototype.toggleButtons = function() {
     document.getElementById("refreshButton").onclick = () => {
       window.location.reload(true);
@@ -1183,7 +1206,9 @@ const Node = require("./node");
         HorizontalMaze(this, 2, this.height - 3, 2, this.width - 3, "horizontal", false);
         mazeGenerationAnimations(this);
       }
-  
+  /********
+      defining the StopOver button
+      *****/
     document.getElementById("startButtonAddObject").onclick = () => {
         let innerHTML = document.getElementById("startButtonAddObject").innerHTML;
         document.getElementById("endLegend").className = " ";
@@ -1218,8 +1243,10 @@ const Node = require("./node");
             this.clearPath("clickedButton");
           }
         }
-  
       }
+    /********
+      defining the second destination button
+      *****/
       document.getElementById("startButtonAddEnd").onclick = () => {
         let innerHTML = document.getElementById("startButtonAddEnd").innerHTML;
         document.getElementById("bombLegend").className = " ";
