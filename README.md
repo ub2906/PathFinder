@@ -25,7 +25,7 @@ We have used 5 algorithms that use hueristics i.e are based on AI to help find s
 ## UNIQUE FEATURES 
 
 ### 1. Adding Another Target Node
-Adding a new twist to the normal pathfinding project, we can now add two destinations for the rover! The rover would calculate the shortest path that would go through both the target nodes. It would first choose to go to the nearest target, and then to the next target. In the process of doing so it would convert the first target reached to a "stop-over" node (see below) which would help the user identify the first and the final destination.
+Adding a new twist to the normal pathfinding project, we can now add two destinations for the rover! The rover will find the shortest path through both the target nodes while simultaneously deciding what the final destination needs to be. In the process of doing so it would convert the first target reached to a "stop-over" node (see below) to help the user identify the first and the final destination.
 
 ### 2. Weighted Nodes
 We can allocate weight to random nodes. It can be thought that the Grid is a forest and the weight nodes are the "dense" portions while the other nodes are lighter(preferred for easier movement).Hence the rover would try to avoid going through it when finding shortest path. However if it calculates that going through the weightnode is the only viable solution left, it will go through it as well!
