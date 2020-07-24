@@ -1525,6 +1525,7 @@ module.exports = mazeGenerationAnimations;
             }
           } else {
             document.getElementById('startButtonAddEnd').style.pointerEvents = 'auto';
+            document.getElementById("algorithmDescriptor").innerHTML = `<i>`;
             let objectNodeId = this.object;
             document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add StopOver</a></li>';
             document.getElementById("endLegend").className = " ";
@@ -1561,6 +1562,7 @@ module.exports = mazeGenerationAnimations;
             }
           } else {
             document.getElementById('startButtonAddObject').style.pointerEvents = 'auto';
+            document.getElementById("algorithmDescriptor").innerHTML = `<i>`;
             let endNodeId = this.end;
             document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add T2</a></li>';
             document.getElementById("bombLegend").className = " ";
