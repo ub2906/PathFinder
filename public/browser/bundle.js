@@ -1562,7 +1562,7 @@ module.exports = mazeGenerationAnimations;
           } else {
             document.getElementById('startButtonAddObject').style.pointerEvents = 'auto';
             let endNodeId = this.end;
-            document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add Target(T2)</a></li>';
+            document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add T2</a></li>';
             document.getElementById("bombLegend").className = " ";
             document.getElementById(endNodeId).className = "unvisited";
             this.end = null;
