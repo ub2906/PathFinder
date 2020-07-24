@@ -1496,17 +1496,18 @@ module.exports = mazeGenerationAnimations;
   
     document.getElementById("startButtonAddObject").onclick = () => {
         let innerHTML = document.getElementById("startButtonAddObject").innerHTML;
-        document.getElementById("endLegend").className = "";
+        document.getElementById('startButtonAddEnd').style.pointerEvents = 'none';
         if (this.currentAlgorithm !== "bidirectional") {
           if (innerHTML.includes("Add")) {
+            
             let r = Math.floor(this.height / 2);
             let c = Math.floor(2 * this.width / 4);
             let objectNodeId = `${r}-${c}`;
             if (this.target === objectNodeId || this.start === objectNodeId || this.numberOfObjects === 1) {
               console.log("Failure to place object.");
             } else {
+              //
               document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Remove Stop</a></li>';
-              document.getElementById("endLegend").className = "strikethrough"
               this.clearPath("clickedButton");
               this.object = objectNodeId;
               this.numberOfObjects = 1;
@@ -1514,9 +1515,9 @@ module.exports = mazeGenerationAnimations;
               document.getElementById(objectNodeId).className = "object";
             }
           } else {
+            document.getElementById('startButtonAddEnd').style.pointerEvents = 'auto';
             let objectNodeId = this.object;
             document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Stop</a></li>';
-            document.getElementById("endLegend").className = "";
             document.getElementById(objectNodeId).className = "unvisited";
             this.object = null;
             this.numberOfObjects = 0;
@@ -1525,21 +1526,22 @@ module.exports = mazeGenerationAnimations;
             this.clearPath("clickedButton");
           }
         }
+  
       }
-    
       document.getElementById("startButtonAddEnd").onclick = () => {
         let innerHTML = document.getElementById("startButtonAddEnd").innerHTML;
-        document.getElementById("bombLegend").className = "";
+        document.getElementById('startButtonAddObject').style.pointerEvents = 'none';
         if (this.currentAlgorithm !== "bidirectional") {
           if (innerHTML.includes("Add")) {
+            
             let r = Math.floor(this.height / 4);
             let c = Math.floor(2 * this.width / 4);
             let endNodeId = `${r}-${c}`;
             if (this.target === endNodeId || this.start === endNodeId || this.numberOfEnds === 1) {
               console.log("Failure to place object.");
             } else {
-                document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Remove T2</a></li>'
-                document.getElementById("bombLegend").className = "strikethrough"
+              //document.getElementById('startButtonAddObject').style.pointerEvents = 'auto';
+              document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Remove End</a></li>';
               this.clearPath("clickedButton");
               this.end = endNodeId;
               this.numberOfEnds = 1;
@@ -1547,15 +1549,14 @@ module.exports = mazeGenerationAnimations;
               document.getElementById(endNodeId).className = "end";
             }
           } else {
+            document.getElementById('startButtonAddEnd').style.pointerEvents = 'auto';
             let endNodeId = this.end;
-            document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add T2</a></li>'
-            document.getElementById("bombLegend").className = ""
-              // document.getElementById("startButtonAddObject").className = "navbar-inverse navbar-nav disabledA";
+            document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add another Target</a></li>';
             document.getElementById(endNodeId).className = "unvisited";
             this.end = null;
             this.numberOfEnds = 0;
             this.nodes[endNodeId].status = "unvisited";
-            this.isENd= false;
+            this.isEnd= false;
             this.clearPath("clickedButton");
           }
         }
