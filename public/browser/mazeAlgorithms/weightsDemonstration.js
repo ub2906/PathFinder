@@ -1,3 +1,4 @@
+//automatic creation of a random weighted maze(having weight nodes at random places)
 function weightsDemonstration(board) {
   let currentIdX = board.height - 1;
   let currentIdY = 35;
