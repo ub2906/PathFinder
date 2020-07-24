@@ -1,3 +1,4 @@
+//creation of a maze by basic recursive division
 function recursiveDivisionMaze(board, rowStart, rowEnd, colStart, colEnd, orientation, surroundingWalls, type) {
   if (rowEnd < rowStart || colEnd < colStart) {
     return;
