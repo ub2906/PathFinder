@@ -6,21 +6,21 @@ This project's goal is to aid a mars rover powered by AI to find its path to it'
 
 We have used 5 algorithms that use hueristics i.e are based on AI to help find shortest path,namely- A*,Greedy Best-first, Swarm, Convergent Swarm,Bidirectional Swarm,along with some other simple yet effecient algorithms such as dijkstra, bfs,dfs.Lets meet the algos used!
 
-* Dijkstra's Algorithm (weighted):for finding the shortest paths between nodes in a graph, which may represent, for example, road networks. ; GIVES SHORTEST PATH
+* **Dijkstra's Algorithm (weighted):** for finding the shortest paths between nodes in a graph, which may represent, for example, road networks. ; GIVES SHORTEST PATH
 
-* A Search* (weighted): A* is a graph traversal and path search algorithm which uses heuristics, It is often used in many fields of computer science due to its completeness, optimality, and optimal efficiency. One major practical drawback is its space complexity, as it stores all generated nodes in memory;  FASTER THAN DIJKSTRA; GIVES SHORTEST PATH
+* **A Star Search (weighted):** A* is a graph traversal and path search algorithm which uses heuristics, It is often used in many fields of computer science due to its completeness, optimality, and optimal efficiency. One major practical drawback is its space complexity, as it stores all generated nodes in memory;  FASTER THAN DIJKSTRA; GIVES SHORTEST PATH
 
-* Greedy Best-first Search (weighted): Greedy best-first search algorithm always selects the path which appears best at that moment. It is the combination of depth-first search and breadth-first search algorithms. It uses the heuristic function and search. Best-first search allows us to take the advantages of both algorithms; FASTER THAN A* BUT NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
+* **Greedy Best-first Search (weighted):** Greedy best-first search algorithm always selects the path which appears best at that moment. It is the combination of depth-first search and breadth-first search algorithms. It uses the heuristic function and search. Best-first search allows us to take the advantages of both algorithms; FASTER THAN A* BUT NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
 
-* Swarm Algorithm (weighted): a metaheuristic algorithm based on the concept of swarm intelligence capable of solving complex mathematics problems existing in engineering ;It is  mix of Dijkstra and A*; NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
+* **Swarm Algorithm (weighted):** a metaheuristic algorithm based on the concept of swarm intelligence capable of solving complex mathematics problems existing in engineering ;It is  mix of Dijkstra and A*; NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
 
-* Convergent Swarm Algorithm (weighted): the faster, more heuristic-heavy version of Swarm;  NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
+* **Convergent Swarm Algorithm (weighted):** the faster, more heuristic-heavy version of Swarm;  NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
 
-* Bidirectional Swarm Algorithm (weighted): Swarm Algorithm from both sides; NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
+* **Bidirectional Swarm Algorithm (weighted):** Swarm Algorithm from both sides; NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
 
-* Breadth-first Search (unweighted): ;Breadth-first search is an algorithm for traversing or searching tree or graph data structures. It starts at the tree root, and explores all of the neighbor nodes at the present depth prior to moving on to the nodes at the next depth level; GIVES SHORTEST PATH
+* **Breadth-first Search (unweighted):** Breadth-first search is an algorithm for traversing or searching tree or graph data structures. It starts at the tree root, and explores all of the neighbor nodes at the present depth prior to moving on to the nodes at the next depth level; GIVES SHORTEST PATH
 
-* Depth-first Search (unweighted):Depth-first search (DFS) is an algorithm for traversing or searching tree or graph data structures. The algorithm starts at the root node (selecting some arbitrary node as the root node in the case of a graph) and explores as far as possible along each branch before backtracking; NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
+* **Depth-first Search (unweighted):** Depth-first search (DFS) is an algorithm for traversing or searching tree or graph data structures. The algorithm starts at the root node (selecting some arbitrary node as the root node in the case of a graph) and explores as far as possible along each branch before backtracking; NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
 
 ## UNIQUE FEATURES 
 
