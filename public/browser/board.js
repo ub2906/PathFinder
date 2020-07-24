@@ -1,4 +1,4 @@
-const Node = require("./node");
+  const Node = require("./node");
   const launchAnimations = require("./animations/launchAnimations");
   const launchInstantAnimations = require("./animations/launchInstantAnimations");
   const mazeGenerationAnimations = require("./animations/mazeGenerationAnimations");
