@@ -1,3 +1,4 @@
+//automatically creating a maze in the form of a stair
 function stairDemonstration(board) {
   let currentIdX = board.height - 1;
   let currentIdY = 0;
