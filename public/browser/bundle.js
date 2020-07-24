@@ -1526,7 +1526,7 @@ module.exports = mazeGenerationAnimations;
           } else {
             document.getElementById('startButtonAddEnd').style.pointerEvents = 'auto';
             let objectNodeId = this.object;
-            document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Stop</a></li>';
+            document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add StopOver</a></li>';
             document.getElementById("endLegend").className = " ";
             document.getElementById(objectNodeId).className = "unvisited";
             this.object = null;
