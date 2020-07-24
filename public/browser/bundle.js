@@ -814,13 +814,13 @@ module.exports = mazeGenerationAnimations;
                 return (xChange + yChange);
               }
               if(x<=y){
-                console.log("x");
                 this.object = this.target;
                 this.target = this.end;
                 success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
                 launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+                this.target=this.end;
+                this.end=this.object;
               }else{
-                console.log("y",y); 
                 this.object = this.end;
                 success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
                 launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
@@ -856,6 +856,8 @@ module.exports = mazeGenerationAnimations;
                 this.target = this.end;
                 success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
                 launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+                this.target=this.end;
+                this.end=this.object;
               }else{
                 this.object = this.end;
                 success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
@@ -892,6 +894,8 @@ module.exports = mazeGenerationAnimations;
                 this.target = this.end;
                 success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
                 launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
+                this.target=this.end;
+                this.end=this.object;
               }else{
                 this.object = this.end;
                 success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
@@ -999,9 +1003,11 @@ module.exports = mazeGenerationAnimations;
             let y = getDistance(this.nodes[this.start],this.nodes[this.end],name);
             if(x<y){
               this.object = this.target;
-                this.target = this.end;
-            success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
-            launchInstantAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+              this.target = this.end;
+              success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+              launchInstantAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+              this.target=this.end;
+              this.end=this.object;
           }else{
             this.object=this.end;
             success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
@@ -1027,9 +1033,11 @@ module.exports = mazeGenerationAnimations;
             let y = getDistance(this.nodes[this.start],this.nodes[this.end],name);
             if(x<y){
               this.object = this.target;
-                this.target = this.end;
-            success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
-            launchInstantAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+              this.target = this.end;
+              success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
+              launchInstantAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+              this.target=this.end;
+              this.end=this.object;
           }else{
             this.object=this.end;
             success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
@@ -1054,9 +1062,11 @@ module.exports = mazeGenerationAnimations;
             let y = getDistance(this.nodes[this.start],this.nodes[this.end],name);
             if(x<y){
               this.object = this.target;
-                this.target = this.end;
-            success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
-            launchInstantAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
+              this.target = this.end;
+              success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
+              launchInstantAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
+              this.target=this.end;
+              this.end=this.object;
           }else{
             this.object=this.end;
             success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
@@ -1221,13 +1231,13 @@ module.exports = mazeGenerationAnimations;
                 let y = getDistance(this.nodes[this.start],this.nodes[this.end],name);
                 
                 if(x<y){
-                  console.log("x");
                   this.object = this.target;
                   this.target = this.end;
                   success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
                   launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+                  this.target=this.end;
+                  this.end=this.object;
                 }else{
-                  console.log("y");
                   this.object=this.end;
                   success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
                   launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
@@ -1251,13 +1261,13 @@ module.exports = mazeGenerationAnimations;
                 let y = getDistance(this.nodes[this.start],this.nodes[this.end],name);
                 
                 if(x<y){
-                  console.log("x");
                   this.object = this.target;
                   this.target = this.end;
                   success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
                   launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
+                  this.target=this.end;
+                  this.end=this.object;
                 }else{
-                  console.log("y");
                   this.object=this.end;
                   success = weightedSearchAlgorithm(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm, this.currentHeuristic);
                   launchAnimations(this, success, "weighted", "object", this.currentAlgorithm, this.currentHeuristic);
@@ -1285,6 +1295,8 @@ module.exports = mazeGenerationAnimations;
                   this.target = this.end;
                   success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
                   launchAnimations(this, success, "unweighted", "object", this.currentAlgorithm);
+                  this.target=this.end;
+                  this.end=this.object;
                 }else{
                   this.object=this.end;
                   success = DFSnBFS(this.nodes, this.start, this.object, this.objectNodesToAnimate, this.boardArray, this.currentAlgorithm);
