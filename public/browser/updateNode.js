@@ -1,3 +1,4 @@
+//calculates the manhattan distances between the nodes and return the updated nodes
 const getDistance = require("./getDistance");
 function updateNode(currentNode, targetNode, actualTargetNode, name, nodes, actualStartNode, heuristic, boardArray) {
     let distance = getDistance(currentNode, targetNode,name);
