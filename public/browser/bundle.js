@@ -1496,17 +1496,16 @@ module.exports = mazeGenerationAnimations;
   
     document.getElementById("startButtonAddObject").onclick = () => {
         let innerHTML = document.getElementById("startButtonAddObject").innerHTML;
-        document.getElementById('startButtonAddEnd').style.pointerEvents = 'none';
+        
         if (this.currentAlgorithm !== "bidirectional") {
           if (innerHTML.includes("Add")) {
-            
+            document.getElementById('startButtonAddEnd').style.pointerEvents = 'none';
             let r = Math.floor(this.height / 2);
             let c = Math.floor(2 * this.width / 4);
             let objectNodeId = `${r}-${c}`;
             if (this.target === objectNodeId || this.start === objectNodeId || this.numberOfObjects === 1) {
               console.log("Failure to place object.");
             } else {
-              //
               document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Remove Stop</a></li>';
               this.clearPath("clickedButton");
               this.object = objectNodeId;
@@ -1530,17 +1529,16 @@ module.exports = mazeGenerationAnimations;
       }
       document.getElementById("startButtonAddEnd").onclick = () => {
         let innerHTML = document.getElementById("startButtonAddEnd").innerHTML;
-        document.getElementById('startButtonAddObject').style.pointerEvents = 'none';
+        
         if (this.currentAlgorithm !== "bidirectional") {
           if (innerHTML.includes("Add")) {
-            
+            document.getElementById('startButtonAddObject').style.pointerEvents = 'none';
             let r = Math.floor(this.height / 4);
             let c = Math.floor(2 * this.width / 4);
             let endNodeId = `${r}-${c}`;
             if (this.target === endNodeId || this.start === endNodeId || this.numberOfEnds === 1) {
               console.log("Failure to place object.");
             } else {
-              //document.getElementById('startButtonAddObject').style.pointerEvents = 'auto';
               document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Remove End</a></li>';
               this.clearPath("clickedButton");
               this.end = endNodeId;
@@ -1549,7 +1547,7 @@ module.exports = mazeGenerationAnimations;
               document.getElementById(endNodeId).className = "end";
             }
           } else {
-            document.getElementById('startButtonAddEnd').style.pointerEvents = 'auto';
+            document.getElementById('startButtonAddObject').style.pointerEvents = 'auto';
             let endNodeId = this.end;
             document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add another Target</a></li>';
             document.getElementById(endNodeId).className = "unvisited";
