@@ -1,3 +1,4 @@
+//to view how the algorithm is working in the form of animations
 const weightedSearchAlgorithm = require("../pathfindingAlgorithms/weightedSearchAlgorithm");
 const DFSnBFS = require("../pathfindingAlgorithms/DFSnBFS");
 
