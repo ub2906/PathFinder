@@ -1333,12 +1333,20 @@ module.exports = mazeGenerationAnimations;
         this.currentHeuristic = "manhattanDistance";
         if (this.numberOfObjects) {
           let objectNodeId = this.object;
-          document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add a Bomb</a></li>';
+          document.getElementById("startButtonAddObject").innerHTML = '<a href="#">Add Stop</a></li>';
           document.getElementById(objectNodeId).className = "unvisited";
           this.object = null;
           this.numberOfObjects = 0;
           this.nodes[objectNodeId].status = "unvisited";
           this.isObject = false;
+        }
+        if (this.numberOfEnds) {
+          document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add T2</a></li>';
+          document.getElementById(this.end).className = "unvisited";
+          this.end = null;
+          this.numberOfEnds = 0;
+          this.nodes[this.end].status = "unvisited";
+          this.isEnd = false;
         }
         this.clearPath("clickedButton");
         this.changeStartNodeImages();
