@@ -1,3 +1,4 @@
+// to keep a track of all the nodes present on the grid
 function Node(id, status) {
   this.id = id;
   this.status = status;
