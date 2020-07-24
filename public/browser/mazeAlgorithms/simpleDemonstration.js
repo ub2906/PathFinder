@@ -1,3 +1,4 @@
+//automatic creation of a random maze everytime button is clicked
 function simpleDemonstration(board) {
   let currentIdY = board.width - 10;
   for (let counter = 0; counter < 7; counter++) {
