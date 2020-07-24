@@ -1539,7 +1539,7 @@ module.exports = mazeGenerationAnimations;
       }
       document.getElementById("startButtonAddEnd").onclick = () => {
         let innerHTML = document.getElementById("startButtonAddEnd").innerHTML;
-        document.getElementById("objectLegend").className = " ";
+        document.getElementById("bombLegend").className = " ";
         if (this.currentAlgorithm !== "bidirectional") {
           if (innerHTML.includes("Add")) {
             document.getElementById('startButtonAddObject').style.pointerEvents = 'none';
@@ -1550,7 +1550,7 @@ module.exports = mazeGenerationAnimations;
               console.log("Failure to place object.");
             } else {
               document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Remove T2</a></li>';
-              document.getElementById("objectLegend").className = "strikethrough";
+              document.getElementById("bombLegend").className = "strikethrough";
               this.clearPath("clickedButton");
               this.end = endNodeId;
               this.numberOfEnds = 1;
@@ -1561,7 +1561,7 @@ module.exports = mazeGenerationAnimations;
             document.getElementById('startButtonAddObject').style.pointerEvents = 'auto';
             let endNodeId = this.end;
             document.getElementById("startButtonAddEnd").innerHTML = '<a href="#">Add Target(T2)</a></li>';
-            document.getElementById("objectLegend").className = " ";
+            document.getElementById("bombLegend").className = " ";
             document.getElementById(endNodeId).className = "unvisited";
             this.end = null;
             this.numberOfEnds = 0;
