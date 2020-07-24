@@ -1,3 +1,4 @@
+//collects the neighbouring nodes to be covered and updates the list
 const getNeighbors = require("./getNeighbors");
 const updateNode = require("./updateNode");
 const bidirectional = require("./pathfindingAlgorithms/birdirectional.js");
