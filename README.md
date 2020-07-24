@@ -8,7 +8,7 @@ We have used 5 algorithms that use hueristics i.e are based on AI to help find s
 
 * **Dijkstra's Algorithm (weighted):** for finding the shortest paths between nodes in a graph, which may represent, for example, road networks. ; GIVES SHORTEST PATH
 
-* **A Star Search (weighted):** A* is a graph traversal and path search algorithm which uses heuristics, It is often used in many fields of computer science due to its completeness, optimality, and optimal efficiency. One major practical drawback is its space complexity, as it stores all generated nodes in memory;  FASTER THAN DIJKSTRA; GIVES SHORTEST PATH
+* **A * Search (weighted):** A* is a graph traversal and path search algorithm which uses heuristics, It is often used in many fields of computer science due to its completeness, optimality, and optimal efficiency. One major practical drawback is its space complexity, as it stores all generated nodes in memory;  FASTER THAN DIJKSTRA; GIVES SHORTEST PATH
 
 * **Greedy Best-first Search (weighted):** Greedy best-first search algorithm always selects the path which appears best at that moment. It is the combination of depth-first search and breadth-first search algorithms. It uses the heuristic function and search. Best-first search allows us to take the advantages of both algorithms; FASTER THAN A* BUT NOT NECESSARILY GIVES GUARANTEE SHORTEST PATH
 
