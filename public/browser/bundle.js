@@ -1508,6 +1508,7 @@ module.exports = mazeGenerationAnimations;
         if (this.currentAlgorithm !== "bidirectional") {
           if (innerHTML.includes("Add")) {
             document.getElementById('startButtonAddEnd').style.pointerEvents = 'none';
+            document.getElementById("algorithmDescriptor").innerHTML = `<i><b>Remove StopOver</b> to enable the <b>Second Destination</b>(Add T2) node`;
             let r = Math.floor(this.height / 2);
             let c = Math.floor(2 * this.width / 4);
             let objectNodeId = `${r}-${c}`;
@@ -1543,6 +1544,7 @@ module.exports = mazeGenerationAnimations;
         if (this.currentAlgorithm !== "bidirectional") {
           if (innerHTML.includes("Add")) {
             document.getElementById('startButtonAddObject').style.pointerEvents = 'none';
+            document.getElementById("algorithmDescriptor").innerHTML = `<i><b>Remove T2</b> to enable the <b>StopOver</b> node`;
             let r = Math.floor(this.height / 4);
             let c = Math.floor(2 * this.width / 4);
             let endNodeId = `${r}-${c}`;
