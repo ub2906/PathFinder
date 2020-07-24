@@ -1,3 +1,4 @@
+//for dijkstras, greedy best first, swarm and covergent swarm algorithms
 const astar = require("./astar");
 const updateNeighbors = require("./updateNeighbors");
 function weightedSearchAlgorithm(nodes, start, target, nodesToAnimate, boardArray, name, heuristic) {
